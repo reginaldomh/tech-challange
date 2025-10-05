@@ -1,7 +1,9 @@
 package com.fiapchallenge.garage.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiapchallenge.garage.adapters.outbound.repositories.JpaCustomerRepository;
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
+import com.fiapchallenge.garage.application.commands.customer.CreateCustomerCmd;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,14 +27,18 @@ public class CustomerIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private JpaCustomerRepository customerRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     void shouldCreateCustomerAndPersistToDatabase() throws Exception {
+        CreateCustomerCmd command = new CreateCustomerCmd("John Doe", "john@example.com", "123456789");
+        String requestBody = objectMapper.writeValueAsString(command);
+
         // When
         mockMvc.perform(post("/customers")
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .param("name", "John Doe")
-                .param("email", "john@example.com")
-                .param("phone", "123456789"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.email").value("john@example.com"))

@@ -1,11 +1,11 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
+import com.fiapchallenge.garage.application.commands.customer.CreateCustomerCmd;
 import com.fiapchallenge.garage.application.service.CustomerService;
 import com.fiapchallenge.garage.domain.customer.Customer;
-import com.fiapchallenge.garage.domain.customer.CustomerRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +22,8 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
 
     @Override
     @PostMapping
-    public ResponseEntity<Customer> create(@Valid @ModelAttribute CustomerRequestDTO customerRequestDTO) {
-        Customer customer = customerService.create(customerRequestDTO);
+    public ResponseEntity<Customer> create(@Valid @RequestBody CreateCustomerCmd createCustomerCmd) {
+        Customer customer = customerService.create(createCustomerCmd);
         return ResponseEntity.ok(customer);
     }
 }

@@ -11,10 +11,13 @@ public class Customer {
     private String email;
     private String phone;
 
-    public Customer(CustomerRequestDTO customerRequestDTO) {
-        this.name = customerRequestDTO.name();
-        this.email = customerRequestDTO.email();
-        this.phone = customerRequestDTO.phone();
+    public Customer() {
+    }
+
+    public Customer(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
     }
 
     public Customer(UUID id, String name, String email, String phone) {
