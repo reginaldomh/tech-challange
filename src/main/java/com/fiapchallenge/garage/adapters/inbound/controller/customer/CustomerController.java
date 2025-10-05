@@ -1,4 +1,4 @@
-package com.fiapchallenge.garage.adapters.inbound.controller;
+package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
 import com.fiapchallenge.garage.application.service.CustomerService;
 import com.fiapchallenge.garage.domain.customer.Customer;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/customers")
-public class CustomerController {
+public class CustomerController implements CustomerControllerOpenApiSpec {
 
     private final CustomerService customerService;
 
@@ -20,7 +20,8 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @PostMapping(consumes = "multipart/form-data")
+    @Override
+    @PostMapping
     public ResponseEntity<Customer> create(@Valid @ModelAttribute CustomerRequestDTO customerRequestDTO) {
         Customer customer = customerService.create(customerRequestDTO);
         return ResponseEntity.ok(customer);
