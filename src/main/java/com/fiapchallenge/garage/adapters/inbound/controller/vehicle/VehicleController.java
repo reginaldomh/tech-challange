@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/vehicles")
-public class VehicleController {
+public class VehicleController implements VehicleControllerOpenApiSpec {
 
     private final VehicleService vehicleService;
 
@@ -18,6 +18,7 @@ public class VehicleController {
     }
 
     @PostMapping
+    @Override
     public ResponseEntity<Vehicle> create(@Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
         Vehicle vehicle = vehicleService.create(vehicleRequestDTO);
         return ResponseEntity.ok(vehicle);
