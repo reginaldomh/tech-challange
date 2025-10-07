@@ -1,8 +1,7 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.serviceorder;
 
-import com.fiapchallenge.garage.application.service.CustomerService;
-import com.fiapchallenge.garage.domain.customer.Customer;
-import com.fiapchallenge.garage.domain.customer.CustomerRequestDTO;
+import com.fiapchallenge.garage.application.service.ServiceOrderService;
+import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/service-orders")
 public class ServiceOrderController implements ServiceOrderOpenApiSpec {
 
-    private final CustomerService customerService;
+    private final ServiceOrderService serviceOrderService;
 
-    public ServiceOrderController(CustomerService customerService) {
-        this.customerService = customerService;
+    public ServiceOrderController(ServiceOrderService serviceOrderService) {
+        this.serviceOrderService = serviceOrderService;
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<Customer> create(@Valid @RequestBody ServiceOrderRequestDTO serviceOrderRequestDTO) {
-        Customer customer = customerService.create(serviceOrderRequestDTO);
-        return ResponseEntity.ok(customer);
+    public ResponseEntity<ServiceOrder> create(@Valid @RequestBody ServiceOrderRequestDTO serviceOrderRequestDTO) {
+        ServiceOrder serviceOrder = serviceOrderService.create(serviceOrderRequestDTO);
+        return ResponseEntity.ok(serviceOrder);
     }
 }
