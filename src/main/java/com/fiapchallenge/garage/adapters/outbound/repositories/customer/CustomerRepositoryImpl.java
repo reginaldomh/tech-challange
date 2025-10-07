@@ -1,4 +1,4 @@
-package com.fiapchallenge.garage.adapters.outbound.repositories;
+package com.fiapchallenge.garage.adapters.outbound.repositories.customer;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
 import com.fiapchallenge.garage.domain.customer.Customer;

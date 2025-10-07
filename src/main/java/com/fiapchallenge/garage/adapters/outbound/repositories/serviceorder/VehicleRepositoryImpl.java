@@ -1,4 +1,4 @@
-package com.fiapchallenge.garage.adapters.outbound.repositories;
+package com.fiapchallenge.garage.adapters.outbound.repositories.serviceorder;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.VehicleEntity;
 import com.fiapchallenge.garage.domain.vehicle.Vehicle;

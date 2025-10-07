@@ -1,6 +1,6 @@
 package com.fiapchallenge.garage.application.service;
 
-import com.fiapchallenge.garage.adapters.outbound.repositories.CustomerRepositoryImpl;
+import com.fiapchallenge.garage.adapters.outbound.repositories.customer.CustomerRepositoryImpl;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRequestDTO;
 import org.springframework.stereotype.Service;

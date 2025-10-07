@@ -1,6 +1,6 @@
 package com.fiapchallenge.garage.integration;
 
-import com.fiapchallenge.garage.adapters.outbound.repositories.JpaCustomerRepository;
+import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
