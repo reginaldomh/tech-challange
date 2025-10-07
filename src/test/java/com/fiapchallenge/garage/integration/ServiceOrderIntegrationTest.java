@@ -1,9 +1,12 @@
 package com.fiapchallenge.garage.integration;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
+import com.fiapchallenge.garage.adapters.outbound.entities.ServiceOrderEntity;
 import com.fiapchallenge.garage.adapters.outbound.entities.VehicleEntity;
 import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
+import com.fiapchallenge.garage.adapters.outbound.repositories.serviceorder.JpaServiceOrderRepository;
 import com.fiapchallenge.garage.adapters.outbound.repositories.vehicle.JpaVehicleRepository;
+import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,24 +26,50 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class VehicleIntegrationTest extends BaseIntegrationTest {
+public class ServiceOrderIntegrationTest extends BaseIntegrationTest {
 
     private final MockMvc mockMvc;
     private final JpaVehicleRepository vehicleRepository;
     private final JpaCustomerRepository customerRepository;
+    private final JpaServiceOrderRepository serviceOrderRepository;
 
     @Autowired
-    public VehicleIntegrationTest(MockMvc mockMvc, JpaVehicleRepository vehicleRepository, JpaCustomerRepository customerRepository) {
+    public ServiceOrderIntegrationTest(MockMvc mockMvc, JpaVehicleRepository vehicleRepository, JpaCustomerRepository customerRepository, JpaServiceOrderRepository serviceOrderRepository) {
         this.mockMvc = mockMvc;
         this.vehicleRepository = vehicleRepository;
         this.customerRepository = customerRepository;
+        this.serviceOrderRepository = serviceOrderRepository;
     }
 
     @Test
-    @DisplayName("Deve criar um veículo vinculado a um cliente existente e persistir")
+    @DisplayName("Deve criar uma ordem de serviço vinculada a um cliente e persistir")
     void shouldCreateVehicleAndPersistToDatabase() throws Exception {
         UUID customerId = createCustomer();
+        UUID vehicleId = createVehicle(customerId);
 
+        String serviceOrderJson = """
+            {
+              "description": "Troca de óleo e filtro",
+              "vehicleId": "%s"
+            }
+        """.formatted(vehicleId.toString());
+
+        mockMvc.perform(post("/service-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serviceOrderJson)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description").value("Troca de óleo e filtro"))
+                .andExpect(jsonPath("$.vehicleId").value(vehicleId.toString()));
+
+        ServiceOrderEntity savedServiceOrder = serviceOrderRepository.findAll().getLast();
+        assertThat(savedServiceOrder.getDescription()).isEqualTo("Troca de óleo e filtro");
+        assertThat(savedServiceOrder.getStatus()).isEqualTo(ServiceOrderStatus.CREATED);
+        assertThat(savedServiceOrder.getVehicleId()).isEqualTo(vehicleId);
+        assertThat(savedServiceOrder.getId()).isNotNull();
+    }
+
+    private UUID createVehicle(UUID customerId) throws Exception {
         String vehicleJson = """
             {
               "model": "Civic",
@@ -62,7 +91,7 @@ public class VehicleIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.brand").value("Honda"))
                 .andExpect(jsonPath("$.licensePlate").value("ABC1D23"));
 
-        VehicleEntity savedVehicle = vehicleRepository.findAll().getFirst();
+        VehicleEntity savedVehicle = vehicleRepository.findAll().getLast();
         assertThat(savedVehicle.getModel()).isEqualTo("Civic");
         assertThat(savedVehicle.getBrand()).isEqualTo("Honda");
         assertThat(savedVehicle.getLicensePlate()).isEqualTo("ABC1D23");
@@ -71,6 +100,8 @@ public class VehicleIntegrationTest extends BaseIntegrationTest {
         assertThat(savedVehicle.getObservations()).isEqualTo("Troca de óleo recente");
         assertThat(savedVehicle.getCustomerId()).isEqualTo(customerId);
         assertThat(savedVehicle.getId()).isNotNull();
+
+        return savedVehicle.getId();
     }
 
     private UUID createCustomer() throws Exception {
@@ -90,7 +121,7 @@ public class VehicleIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.email").value("pixjr@example.com"))
                 .andExpect(jsonPath("$.phone").value("9871111"));
 
-        CustomerEntity savedCustomer = customerRepository.findAll().get(0);
+        CustomerEntity savedCustomer = customerRepository.findAll().getLast();
         assertThat(savedCustomer.getName()).isEqualTo("Pix JR");
         assertThat(savedCustomer.getEmail()).isEqualTo("pixjr@example.com");
         assertThat(savedCustomer.getPhone()).isEqualTo("9871111");

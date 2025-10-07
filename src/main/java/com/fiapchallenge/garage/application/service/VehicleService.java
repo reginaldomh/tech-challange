@@ -1,12 +1,14 @@
 package com.fiapchallenge.garage.application.service;
 
-import com.fiapchallenge.garage.adapters.outbound.repositories.CustomerRepositoryImpl;
-import com.fiapchallenge.garage.adapters.outbound.repositories.VehicleRepositoryImpl;
+import com.fiapchallenge.garage.adapters.outbound.repositories.customer.CustomerRepositoryImpl;
+import com.fiapchallenge.garage.adapters.outbound.repositories.vehicle.VehicleRepositoryImpl;
 import com.fiapchallenge.garage.domain.vehicle.Vehicle;
 import com.fiapchallenge.garage.domain.vehicle.VehicleRequestDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class VehicleService {
 
     private final VehicleRepositoryImpl vehicleRepository;
