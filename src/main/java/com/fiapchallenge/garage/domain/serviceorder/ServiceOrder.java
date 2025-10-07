@@ -8,4 +8,10 @@ public class ServiceOrder {
     private UUID vehicleId;
     private String description;
     private ServiceOrderStatus status;
+
+    public ServiceOrder(ServiceOrderRequestDTO serviceOrderRequestDTO) {
+        this.vehicleId = serviceOrderRequestDTO.vehicleId();
+        this.description = serviceOrderRequestDTO.description();
+        this.status = ServiceOrderStatus.CREATED;
+    }
 }

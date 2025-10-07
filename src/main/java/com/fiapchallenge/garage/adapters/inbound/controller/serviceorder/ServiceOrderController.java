@@ -24,7 +24,7 @@ public class ServiceOrderController implements ServiceOrderOpenApiSpec {
     @Override
     @PostMapping
     public ResponseEntity<Customer> create(@Valid @RequestBody ServiceOrderRequestDTO serviceOrderRequestDTO) {
-        Customer customer = customerService.create(customerRequestDTO);
+        Customer customer = customerService.create(serviceOrderRequestDTO);
         return ResponseEntity.ok(customer);
     }
 }
