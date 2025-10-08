@@ -1,6 +1,5 @@
 package com.fiapchallenge.garage.application.customer;
 
-import com.fiapchallenge.garage.adapters.outbound.repositories.CustomerRepositoryImpl;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRepository;
 import com.fiapchallenge.garage.domain.customer.command.CreateCustomerCommand;
@@ -13,7 +12,7 @@ public class CreateCustomerService implements CreateCustomerUseCase {
 
     private final CustomerRepository customerRepository;
 
-    public CreateCustomerService(CustomerRepositoryImpl customerRepository) {
+    public CreateCustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 

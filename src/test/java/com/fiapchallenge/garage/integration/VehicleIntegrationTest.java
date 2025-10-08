@@ -2,8 +2,8 @@ package com.fiapchallenge.garage.integration;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
 import com.fiapchallenge.garage.adapters.outbound.entities.VehicleEntity;
-import com.fiapchallenge.garage.adapters.outbound.repositories.JpaCustomerRepository;
-import com.fiapchallenge.garage.adapters.outbound.repositories.JpaVehicleRepository;
+import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
+import com.fiapchallenge.garage.adapters.outbound.repositories.vehicle.JpaVehicleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
