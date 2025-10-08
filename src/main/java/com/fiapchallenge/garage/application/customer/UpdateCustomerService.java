@@ -25,6 +25,7 @@ public class UpdateCustomerService {
         existingCustomer.setName(cmd.name());
         existingCustomer.setEmail(cmd.email());
         existingCustomer.setPhone(cmd.phone());
+        existingCustomer.setCpfCnpj(cmd.cpfCnpj());
 
         return customerRepository.save(existingCustomer);
     }
