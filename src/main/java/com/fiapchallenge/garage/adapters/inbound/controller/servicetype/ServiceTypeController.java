@@ -1,6 +1,7 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.servicetype;
 
-import com.fiapchallenge.garage.application.service.ServiceTypeService;
+import com.fiapchallenge.garage.application.servicetype.CreateServiceTypeUseCase;
+import com.fiapchallenge.garage.application.servicetype.command.CreateServiceTypeCommand;
 import com.fiapchallenge.garage.domain.servicetype.ServiceType;
 import com.fiapchallenge.garage.domain.servicetype.ServiceTypeRequestDTO;
 import jakarta.validation.Valid;
@@ -14,16 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/service-types")
 public class ServiceTypeController implements ServiceTypeOpenApiSpec {
 
-    private final ServiceTypeService serviceTypeService;
+    private final CreateServiceTypeUseCase createServiceTypeUseCase;
 
-    public ServiceTypeController(ServiceTypeService serviceTypeService) {
-        this.serviceTypeService = serviceTypeService;
+    public ServiceTypeController(CreateServiceTypeUseCase createServiceTypeUseCase) {
+        this.createServiceTypeUseCase = createServiceTypeUseCase;
     }
 
     @Override
     @PostMapping
     public ResponseEntity<ServiceType> create(@Valid @RequestBody ServiceTypeRequestDTO serviceTypeRequestDTO) {
-        ServiceType serviceType = serviceTypeService.create(serviceTypeRequestDTO);
+        CreateServiceTypeCommand command = new CreateServiceTypeCommand(
+                serviceTypeRequestDTO.description(),
+                serviceTypeRequestDTO.value()
+        );
+        ServiceType serviceType = createServiceTypeUseCase.handle(command);
         return ResponseEntity.ok(serviceType);
     }
 }

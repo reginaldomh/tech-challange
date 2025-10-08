@@ -1,5 +1,7 @@
 package com.fiapchallenge.garage.domain.servicetype;
 
+import com.fiapchallenge.garage.application.servicetype.command.CreateServiceTypeCommand;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -9,9 +11,9 @@ public class ServiceType {
     private BigDecimal value;
     private String description;
 
-    public ServiceType(ServiceTypeRequestDTO serviceTypeRequestDTO) {
-        this.value = serviceTypeRequestDTO.value();
-        this.description = serviceTypeRequestDTO.description();
+    public ServiceType(CreateServiceTypeCommand command) {
+        this.value = command.value();
+        this.description = command.description();
     }
 
     public ServiceType(UUID id, BigDecimal value, String description) {
