@@ -26,7 +26,7 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
                 customerRequestDTO.email(),
                 customerRequestDTO.phone()
         );
-        Customer customer = createCustomerUseCase.create(command);
+        Customer customer = createCustomerUseCase.handle(command);
         return ResponseEntity.ok(customer);
     }
 }

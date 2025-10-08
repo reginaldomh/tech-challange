@@ -21,7 +21,8 @@ public class CreateVehicleService implements CreateVehicleUseCase {
         this.customerRepository = customerRepository;
     }
 
-    public Vehicle create(CreateVehicleCommand command) {
+    @Override
+    public Vehicle handle(CreateVehicleCommand command) {
         Vehicle vehicle = new Vehicle(command);
 
         if (!customerRepository.exists(vehicle.getCustomerId())) {

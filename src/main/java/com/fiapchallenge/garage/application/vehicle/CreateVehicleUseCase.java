@@ -5,5 +5,5 @@ import com.fiapchallenge.garage.domain.vehicle.command.CreateVehicleCommand;
 
 public interface CreateVehicleUseCase {
 
-    Vehicle create(CreateVehicleCommand command);
+    Vehicle handle(CreateVehicleCommand command);
 }

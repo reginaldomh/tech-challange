@@ -30,7 +30,7 @@ public class VehicleController implements VehicleControllerOpenApiSpec {
                 vehicleRequestDTO.observations(),
                 vehicleRequestDTO.customerId()
         );
-        Vehicle vehicle = createVehicleUseCase.create(command);
+        Vehicle vehicle = createVehicleUseCase.handle(command);
         return ResponseEntity.ok(vehicle);
     }
 }

@@ -5,5 +5,5 @@ import com.fiapchallenge.garage.domain.customer.command.CreateCustomerCommand;
 
 public interface CreateCustomerUseCase {
 
-    Customer create(CreateCustomerCommand command);
+    Customer handle(CreateCustomerCommand command);
 }
