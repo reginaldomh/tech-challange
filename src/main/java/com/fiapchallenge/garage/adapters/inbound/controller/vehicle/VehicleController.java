@@ -2,7 +2,8 @@ package com.fiapchallenge.garage.adapters.inbound.controller.vehicle;
 
 import com.fiapchallenge.garage.application.vehicle.CreateVehicleUseCase;
 import com.fiapchallenge.garage.domain.vehicle.Vehicle;
-import com.fiapchallenge.garage.domain.vehicle.VehicleRequestDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.vehicle.dto.VehicleRequestDTO;
+import com.fiapchallenge.garage.domain.vehicle.command.CreateVehicleCommand;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,16 @@ public class VehicleController implements VehicleControllerOpenApiSpec {
     @PostMapping
     @Override
     public ResponseEntity<Vehicle> create(@Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
-        Vehicle vehicle = createVehicleUseCase.create(vehicleRequestDTO);
+        CreateVehicleCommand command = new CreateVehicleCommand(
+                vehicleRequestDTO.model(),
+                vehicleRequestDTO.brand(),
+                vehicleRequestDTO.licensePlate(),
+                vehicleRequestDTO.color(),
+                vehicleRequestDTO.year(),
+                vehicleRequestDTO.observations(),
+                vehicleRequestDTO.customerId()
+        );
+        Vehicle vehicle = createVehicleUseCase.create(command);
         return ResponseEntity.ok(vehicle);
     }
 }

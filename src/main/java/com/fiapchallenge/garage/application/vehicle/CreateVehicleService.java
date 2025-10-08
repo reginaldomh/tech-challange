@@ -3,7 +3,8 @@ package com.fiapchallenge.garage.application.vehicle;
 import com.fiapchallenge.garage.adapters.outbound.repositories.CustomerRepositoryImpl;
 import com.fiapchallenge.garage.adapters.outbound.repositories.VehicleRepositoryImpl;
 import com.fiapchallenge.garage.domain.vehicle.Vehicle;
-import com.fiapchallenge.garage.domain.vehicle.VehicleRequestDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.vehicle.dto.VehicleRequestDTO;
+import com.fiapchallenge.garage.domain.vehicle.command.CreateVehicleCommand;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,8 @@ public class CreateVehicleService implements CreateVehicleUseCase {
         this.customerRepository = customerRepository;
     }
 
-    public Vehicle create(VehicleRequestDTO vehicleRequestDTO) {
-        Vehicle vehicle = new Vehicle(vehicleRequestDTO);
+    public Vehicle create(CreateVehicleCommand command) {
+        Vehicle vehicle = new Vehicle(command);
 
         if (!customerRepository.exists(vehicle.getCustomerId())) {
             throw new IllegalArgumentException("Necessário informar um cliente válido.");

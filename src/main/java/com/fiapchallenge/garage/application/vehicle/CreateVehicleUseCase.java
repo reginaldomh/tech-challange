@@ -1,9 +1,9 @@
 package com.fiapchallenge.garage.application.vehicle;
 
 import com.fiapchallenge.garage.domain.vehicle.Vehicle;
-import com.fiapchallenge.garage.domain.vehicle.VehicleRequestDTO;
+import com.fiapchallenge.garage.domain.vehicle.command.CreateVehicleCommand;
 
 public interface CreateVehicleUseCase {
 
-    Vehicle create(VehicleRequestDTO vehicleRequestDTO);
+    Vehicle create(CreateVehicleCommand command);
 }
