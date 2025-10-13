@@ -4,7 +4,7 @@ import com.fiapchallenge.garage.application.customer.CreateCustomerUseCase;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.command.CreateCustomerCommand;
 
-public class CustomerMockUtils {
+public class CustomerFixture {
 
     public static Customer createCustomer(CreateCustomerUseCase createCustomerUseCase) {
         CreateCustomerCommand command = new CreateCustomerCommand(

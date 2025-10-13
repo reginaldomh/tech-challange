@@ -3,7 +3,7 @@ package com.fiapchallenge.garage.integration.customer;
 import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
 import com.fiapchallenge.garage.application.customer.CreateCustomerUseCase;
 import com.fiapchallenge.garage.integration.BaseIntegrationTest;
-import com.fiapchallenge.garage.utils.CustomerMockUtils;
+import com.fiapchallenge.garage.utils.CustomerFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +35,8 @@ public class ListCustomerIntegrationTest extends BaseIntegrationTest {
     @Test
     @DisplayName("Deve listar todos os clientes")
     void shouldListAllCustomers() throws Exception {
-        CustomerMockUtils.createCustomer(createCustomerUseCase);
-        CustomerMockUtils.createCustomer(createCustomerUseCase, "Jane Smith", "jane@example.com", "987654321", "11222333000181");
+        CustomerFixture.createCustomer(createCustomerUseCase);
+        CustomerFixture.createCustomer(createCustomerUseCase, "Jane Smith", "jane@example.com", "987654321", "11222333000181");
 
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
@@ -54,7 +54,7 @@ public class ListCustomerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("Deve paginar corretamente os clientes")
     void shouldPaginateCustomersCorrectly() throws Exception {
         for (int i = 1; i <= 5; i++) {
-            CustomerMockUtils.createCustomer(createCustomerUseCase, "Customer " + i, "customer" + i + "@example.com", "12345678" + i, "1114447773" + i);
+            CustomerFixture.createCustomer(createCustomerUseCase, "Customer " + i, "customer" + i + "@example.com", "12345678" + i, "1114447773" + i);
         }
 
         mockMvc.perform(get("/customers?page=0&size=2"))
