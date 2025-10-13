@@ -60,8 +60,7 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
         UpdateCustomerCmd updateCustomerCmd = new UpdateCustomerCmd(
                 updateCustomerDTO.name(),
                 updateCustomerDTO.email(),
-                updateCustomerDTO.phone(),
-                updateCustomerDTO.cpfCnpj()
+                updateCustomerDTO.phone()
         );
 
         Customer customer = updateCustomerService.update(id, updateCustomerCmd);

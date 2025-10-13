@@ -74,8 +74,7 @@ public class CustomerIntegrationTest extends BaseIntegrationTest {
                 {
                   "name": "Jane Doe",
                   "email": "jane@example.com",
-                  "phone": "987654321",
-                  "cpfCnpj": "11222333000181"
+                  "phone": "987654321"
                 }
                 """;
 
@@ -85,14 +84,12 @@ public class CustomerIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Jane Doe"))
                 .andExpect(jsonPath("$.email").value("jane@example.com"))
-                .andExpect(jsonPath("$.phone").value("987654321"))
-                .andExpect(jsonPath("$.cpfCnpj").value("11222333000181"));
+                .andExpect(jsonPath("$.phone").value("987654321"));
 
         CustomerEntity updatedCustomer = customerRepository.findById(createdCustomer.getId()).get();
         assertThat(updatedCustomer.getName()).isEqualTo("Jane Doe");
         assertThat(updatedCustomer.getEmail()).isEqualTo("jane@example.com");
         assertThat(updatedCustomer.getPhone()).isEqualTo("987654321");
-        assertThat(updatedCustomer.getCpfCnpj()).isEqualTo("11222333000181");
         assertThat(updatedCustomer.getId()).isEqualTo(createdCustomer.getId());
     }
 
