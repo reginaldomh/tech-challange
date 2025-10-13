@@ -59,7 +59,6 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
                 customerRequestDTO.cpfCnpj()
         );
 
-
         Customer customer = createCustomerUseCase.handle(command);
         return ResponseEntity.ok(customer);
     }
