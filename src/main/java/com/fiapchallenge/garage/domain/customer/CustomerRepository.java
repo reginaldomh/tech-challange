@@ -3,6 +3,8 @@ package com.fiapchallenge.garage.domain.customer;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CustomerRepository {
 
@@ -14,5 +16,9 @@ public interface CustomerRepository {
 
     List<Customer> findAll();
 
+    Page<Customer> findAll(Pageable pageable);
+
     List<Customer> findByFilters(String name, String email, String cpfCnpj);
+
+    Page<Customer> findByFilters(String name, String email, String cpfCnpj, Pageable pageable);
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 
 @Tag(name = "Customer", description = "Customer management API")
 public interface CustomerControllerOpenApiSpec {
@@ -51,14 +52,16 @@ public interface CustomerControllerOpenApiSpec {
         @Parameter(name = "updateCustomer", description = "Dados para atualizar cliente", schema = @Schema(implementation = UpdateCustomerCmd.class))
         @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO);
 
-    @Operation(summary = "Listar clientes", description = "Retorna uma lista de clientes com filtros opcionais")
+    @Operation(summary = "Listar clientes", description = "Retorna uma lista paginada de clientes com filtros opcionais")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Customer.class)))
     })
     @GetMapping
-    ResponseEntity<List<Customer>> list(
+    ResponseEntity<Page<Customer>> list(
         @Parameter(name = "name", description = "Filtrar por nome do cliente") @RequestParam(required = false) String name,
         @Parameter(name = "email", description = "Filtrar por email do cliente") @RequestParam(required = false) String email,
-        @Parameter(name = "cpfCnpj", description = "Filtrar por CPF/CNPJ do cliente") @RequestParam(required = false) String cpfCnpj);
+        @Parameter(name = "cpfCnpj", description = "Filtrar por CPF/CNPJ do cliente") @RequestParam(required = false) String cpfCnpj,
+        @Parameter(name = "page", description = "Número da página (inicia em 0)") @RequestParam(required = false) Integer page,
+        @Parameter(name = "size", description = "Tamanho da página") @RequestParam(required = false) Integer size);
 }

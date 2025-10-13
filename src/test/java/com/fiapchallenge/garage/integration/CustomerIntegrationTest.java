@@ -101,10 +101,12 @@ public class CustomerIntegrationTest extends BaseIntegrationTest {
 
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").value("John Doe"))
-                .andExpect(jsonPath("$[1].name").value("Jane Smith"));
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].name").value("John Doe"))
+                .andExpect(jsonPath("$.content[1].name").value("Jane Smith"))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1));
 
         assertThat(customerRepository.findAll()).hasSize(2);
     }

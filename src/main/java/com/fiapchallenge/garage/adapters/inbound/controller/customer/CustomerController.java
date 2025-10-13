@@ -6,7 +6,6 @@ import com.fiapchallenge.garage.application.customer.CreateCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.ListCustomersService;
 import com.fiapchallenge.garage.application.customer.UpdateCustomerService;
 
-import java.util.List;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
 import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
@@ -14,6 +13,9 @@ import com.fiapchallenge.garage.domain.customer.command.CreateCustomerCommand;
 
 import java.util.UUID;
 import jakarta.validation.Valid;
+import com.fiapchallenge.garage.shared.pagination.CustomPageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +35,17 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<Customer>> list(@RequestParam(required = false) String name, @RequestParam(required = false) String email, @RequestParam(required = false) String cpfCnpj) {
+    public ResponseEntity<Page<Customer>> list(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String cpfCnpj,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
         CustomerFilterCmd filter = new CustomerFilterCmd(name, email, cpfCnpj);
-        List<Customer> customers = listCustomersService.list(filter);
+
+        Pageable pageable = CustomPageRequest.of(page, size);
+        Page<Customer> customers = listCustomersService.list(filter, pageable);
+
         return ResponseEntity.ok(customers);
     }
 

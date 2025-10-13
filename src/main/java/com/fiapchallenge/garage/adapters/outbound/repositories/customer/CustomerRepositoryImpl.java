@@ -3,6 +3,8 @@ package com.fiapchallenge.garage.adapters.outbound.repositories.customer;
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -75,5 +77,29 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                         entity.getCpfCnpj()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Customer> findAll(Pageable pageable) {
+        return jpaCustomerRepository.findAll(pageable)
+                .map(entity -> new Customer(
+                        entity.getId(),
+                        entity.getName(),
+                        entity.getEmail(),
+                        entity.getPhone(),
+                        entity.getCpfCnpj()
+                ));
+    }
+
+    @Override
+    public Page<Customer> findByFilters(String name, String email, String cpfCnpj, Pageable pageable) {
+        return jpaCustomerRepository.findByFilters(name, email, cpfCnpj, pageable)
+                .map(entity -> new Customer(
+                        entity.getId(),
+                        entity.getName(),
+                        entity.getEmail(),
+                        entity.getPhone(),
+                        entity.getCpfCnpj()
+                ));
     }
 }
