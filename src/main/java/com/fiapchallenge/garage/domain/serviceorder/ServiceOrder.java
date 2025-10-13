@@ -55,4 +55,11 @@ public class ServiceOrder {
     public List<UUID> getServiceTypeListIds() {
         return serviceTypeList.stream().map(ServiceType::getId).toList();
     }
+
+    public void startDiagnostic() {
+        if (this.status != ServiceOrderStatus.CREATED) {
+            throw new IllegalStateException("Service order must be in CREATED status to start diagnostic.");
+        }
+        this.status = ServiceOrderStatus.IN_DIAGNOSIS;
+    }
 }
