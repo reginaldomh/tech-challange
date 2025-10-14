@@ -4,6 +4,8 @@ import com.fiapchallenge.garage.adapters.outbound.entities.UserEntity;
 import com.fiapchallenge.garage.adapters.outbound.repositories.user.JpaUserRepository;
 import com.fiapchallenge.garage.application.user.CreateUserService;
 import com.fiapchallenge.garage.application.user.LoginUserService;
+import com.fiapchallenge.garage.domain.user.User;
+import com.fiapchallenge.garage.integration.fixtures.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ public class UserIntegrationTest extends BaseIntegrationTest {
     private final MockMvc mockMvc;
     private final JpaUserRepository jpaUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CreateUserService createUserService;
 
     @Autowired
     public UserIntegrationTest(MockMvc mockMvc, JpaUserRepository jpaUserRepository, PasswordEncoder passwordEncoder, CreateUserService createUserService, LoginUserService loginUserService) {
@@ -35,6 +38,7 @@ public class UserIntegrationTest extends BaseIntegrationTest {
         this.mockMvc = mockMvc;
         this.jpaUserRepository = jpaUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.createUserService = createUserService;
     }
 
     @Test
@@ -64,5 +68,25 @@ public class UserIntegrationTest extends BaseIntegrationTest {
         assertThat(passwordEncoder.matches("senhaSegura123", userEntity.getPassword()));
 
         assertThat(userEntity.getId()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Autenticação de Usuário via API")
+    void shouldAuthenticateUserViaApi() throws Exception {
+        User user = UserFixture.createUser(createUserService);
+        String loginJson = """
+                {
+                  "email": "%s",
+                  "password": "%s"
+                }
+        """.formatted(user.getEmail(), UserFixture.PASSWORD);
+
+        mockMvc.perform(post("/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginJson)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.expiration").isNotEmpty());
     }
 }
