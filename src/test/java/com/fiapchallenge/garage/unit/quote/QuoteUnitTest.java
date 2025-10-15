@@ -1,10 +1,14 @@
 package com.fiapchallenge.garage.unit.quote;
 
+import com.fiapchallenge.garage.application.quote.ApproveQuoteService;
 import com.fiapchallenge.garage.application.quote.CreateQuoteService;
+import com.fiapchallenge.garage.application.quote.command.ApproveQuoteCommand;
 import com.fiapchallenge.garage.application.quote.command.CreateQuoteCommand;
+import com.fiapchallenge.garage.application.serviceorder.StartServiceOrderUseCase;
 import com.fiapchallenge.garage.domain.quote.Quote;
 import com.fiapchallenge.garage.domain.quote.QuoteRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
+import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
 import com.fiapchallenge.garage.unit.quote.util.factory.QuoteTestFactory;
 import com.fiapchallenge.garage.unit.serviceorder.util.factory.ServiceOrderTestFactory;
@@ -32,6 +36,15 @@ public class QuoteUnitTest {
     @Mock
     private QuoteRepository quoteRepository;
 
+    @InjectMocks
+    private ApproveQuoteService approveQuoteService;
+
+    @Mock
+    private ServiceOrderRepository serviceOrderRepository;
+
+    @Mock
+    private StartServiceOrderUseCase approveServiceOrderUseCase;
+
     @Test
     @DisplayName("Criação de Orçamento")
     void shouldCreateQuote() {
@@ -45,5 +58,21 @@ public class QuoteUnitTest {
         assertEquals(mockedServiceOrder.get().getId(), quote.getServiceOrderId());
         assertEquals(QuoteTestFactory.VALUE, quote.getValue());
         verify(quoteRepository).save(any(Quote.class));
+    }
+
+    @Test
+    @DisplayName("Aprovação de Orçamento")
+    void shouldApproveQuote() {
+        UUID vehicleId = UUID.randomUUID();
+        Optional<ServiceOrder> mockedServiceOrder = Optional.of(ServiceOrderTestFactory.createServiceOrder(vehicleId, ServiceOrderStatus.AWAITING_APPROVAL));
+
+        UUID quoteId = UUID.randomUUID();
+        Quote mockedQuote = QuoteTestFactory.createQuote(mockedServiceOrder.get().getId());
+        when(quoteRepository.findById(quoteId)).thenReturn(Optional.of(mockedQuote));
+
+        Quote quote = approveQuoteService.handle(new ApproveQuoteCommand(quoteId));
+
+        assertEquals(mockedServiceOrder.get().getId(), quote.getServiceOrderId());
+        verify(approveServiceOrderUseCase).handle(any());
     }
 }
