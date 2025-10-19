@@ -13,19 +13,12 @@ public class Customer {
     private String phone;
     private CpfCnpj cpfCnpj;
 
-    public Customer(CreateCustomerCommand createCustomerCommand) {
-        this.name = createCustomerCommand.name();
-        this.email = createCustomerCommand.email();
-        this.phone = createCustomerCommand.phone();
-        this.cpfCnpj = createCustomerCommand.cpfCnpj();
-    }
-
-    public Customer(UUID id, String name, String email, String phone, String cpfCnpj) {
+    public Customer(UUID id, String name, String email, String phone, CpfCnpj cpfCnpj) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.cpfCnpj = new CpfCnpj(cpfCnpj);
+        this.cpfCnpj = cpfCnpj;
     }
 
     public UUID getId() {

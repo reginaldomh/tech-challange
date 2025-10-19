@@ -1,5 +1,6 @@
 package com.fiapchallenge.garage.application.customer;
 
+import com.fiapchallenge.garage.domain.customer.CpfCnpj;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRepository;
 import com.fiapchallenge.garage.domain.customer.command.CreateCustomerCommand;
@@ -18,7 +19,9 @@ public class CreateCustomerService implements CreateCustomerUseCase {
 
     @Override
     public Customer handle(CreateCustomerCommand cmd) {
-        Customer customer = new Customer(cmd);
+        CpfCnpj cpfCnpj = new CpfCnpj(cmd.cpfCnpj());
+
+        Customer customer = new Customer(null, cmd.name(), cmd.email(), cmd.phone(), cpfCnpj);
         customer = customerRepository.save(customer);
 
         return customer;

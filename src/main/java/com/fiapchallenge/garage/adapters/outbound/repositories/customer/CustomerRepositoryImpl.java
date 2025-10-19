@@ -1,6 +1,7 @@
 package com.fiapchallenge.garage.adapters.outbound.repositories.customer;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
+import com.fiapchallenge.garage.domain.customer.CpfCnpj;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRepository;
 import org.springframework.data.domain.Page;
@@ -27,13 +28,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
         customerEntity = jpaCustomerRepository.save(customerEntity);
 
-        return new Customer(
-                customerEntity.getId(),
-                customerEntity.getName(),
-                customerEntity.getEmail(),
-                customerEntity.getPhone(),
-                customerEntity.getCpfCnpj()
-        );
+        return convertFromEntity(customerEntity);
     }
 
     @Override
@@ -44,62 +39,42 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public Optional<Customer> findById(UUID id) {
         return jpaCustomerRepository.findById(id)
-                .map(entity -> new Customer(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getEmail(),
-                        entity.getPhone(),
-                        entity.getCpfCnpj()
-                ));
+            .map(this::convertFromEntity);
     }
 
     @Override
     public List<Customer> findAll() {
-        return jpaCustomerRepository.findAll().stream()
-                .map(entity -> new Customer(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getEmail(),
-                        entity.getPhone(),
-                        entity.getCpfCnpj()
-                ))
-                .collect(Collectors.toList());
+        return jpaCustomerRepository.findAll()
+            .stream()
+            .map(this::convertFromEntity)
+            .collect(Collectors.toList());
     }
 
     @Override
     public List<Customer> findByFilters(String name, String email, String cpfCnpj) {
-        return jpaCustomerRepository.findByFilters(name, email, cpfCnpj).stream()
-                .map(entity -> new Customer(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getEmail(),
-                        entity.getPhone(),
-                        entity.getCpfCnpj()
-                ))
-                .collect(Collectors.toList());
+        return jpaCustomerRepository.findByFilters(name, email, cpfCnpj)
+            .stream()
+            .map(this::convertFromEntity)
+            .collect(Collectors.toList());
     }
 
     @Override
     public Page<Customer> findAll(Pageable pageable) {
-        return jpaCustomerRepository.findAll(pageable)
-                .map(entity -> new Customer(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getEmail(),
-                        entity.getPhone(),
-                        entity.getCpfCnpj()
-                ));
+        return jpaCustomerRepository.findAll(pageable).map(this::convertFromEntity);
     }
 
     @Override
     public Page<Customer> findByFilters(String name, String email, String cpfCnpj, Pageable pageable) {
-        return jpaCustomerRepository.findByFilters(name, email, cpfCnpj, pageable)
-                .map(entity -> new Customer(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getEmail(),
-                        entity.getPhone(),
-                        entity.getCpfCnpj()
-                ));
+        return jpaCustomerRepository.findByFilters(name, email, cpfCnpj, pageable).map(this::convertFromEntity);
+    }
+
+    private Customer convertFromEntity(CustomerEntity entity) {
+        return new Customer(
+            entity.getId(),
+            entity.getName(),
+            entity.getEmail(),
+            entity.getPhone(),
+            new CpfCnpj(entity.getCpfCnpj())
+        );
     }
 }

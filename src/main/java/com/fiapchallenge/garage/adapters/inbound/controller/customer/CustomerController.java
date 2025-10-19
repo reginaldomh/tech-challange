@@ -53,13 +53,11 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
     @Override
     @PostMapping
     public ResponseEntity<Customer> create(@Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        CpfCnpj cpfCnpj = new CpfCnpj(customerRequestDTO.cpfCnpj());
-
         CreateCustomerCommand command = new CreateCustomerCommand(
                 customerRequestDTO.name(),
                 customerRequestDTO.email(),
                 customerRequestDTO.phone(),
-                cpfCnpj
+                customerRequestDTO.cpfCnpj()
         );
 
         Customer customer = createCustomerUseCase.handle(command);
