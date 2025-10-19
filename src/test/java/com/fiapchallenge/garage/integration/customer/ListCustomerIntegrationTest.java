@@ -1,6 +1,7 @@
 package com.fiapchallenge.garage.integration.customer;
 
 import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
+import com.fiapchallenge.garage.application.customer.CreateCustomerService;
 import com.fiapchallenge.garage.application.customer.CreateCustomerUseCase;
 import com.fiapchallenge.garage.integration.BaseIntegrationTest;
 import com.fiapchallenge.garage.integration.fixtures.CustomerFixture;
@@ -23,20 +24,20 @@ public class ListCustomerIntegrationTest extends BaseIntegrationTest {
 
     private final MockMvc mockMvc;
     private final JpaCustomerRepository customerRepository;
-    private final CreateCustomerUseCase createCustomerUseCase;
+    private final CreateCustomerService createCustomerService;
 
     @Autowired
-    public ListCustomerIntegrationTest(MockMvc mockMvc, JpaCustomerRepository customerRepository, CreateCustomerUseCase createCustomerUseCase) {
+    public ListCustomerIntegrationTest(MockMvc mockMvc, JpaCustomerRepository customerRepository, CreateCustomerService createCustomerService) {
         this.mockMvc = mockMvc;
         this.customerRepository = customerRepository;
-        this.createCustomerUseCase = createCustomerUseCase;
+        this.createCustomerService = createCustomerService;
     }
 
     @Test
     @DisplayName("Deve listar todos os clientes")
     void shouldListAllCustomers() throws Exception {
-        CustomerFixture.createCustomer(createCustomerUseCase);
-        CustomerFixture.createCustomer(createCustomerUseCase, "Jane Smith", "jane@example.com", "987654321");
+        CustomerFixture.createCustomer(createCustomerService);
+        CustomerFixture.createCustomer(createCustomerService, "Jane Smith", "jane@example.com", "987654321");
 
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
@@ -54,7 +55,7 @@ public class ListCustomerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("Deve paginar corretamente os clientes")
     void shouldPaginateCustomersCorrectly() throws Exception {
         for (int i = 1; i <= 5; i++) {
-            CustomerFixture.createCustomer(createCustomerUseCase, "Customer " + i, "customer" + i + "@example.com", "12345678" + i);
+            CustomerFixture.createCustomer(createCustomerService, "Customer " + i, "customer" + i + "@example.com", "12345678" + i);
         }
 
         mockMvc.perform(get("/customers?page=0&size=2"))
