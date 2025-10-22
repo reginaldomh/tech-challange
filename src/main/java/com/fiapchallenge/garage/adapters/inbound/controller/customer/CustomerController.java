@@ -1,7 +1,8 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
-
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase.CreateCustomerCommand;
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase.DeleteCustomerCmd;
@@ -9,18 +10,24 @@ import com.fiapchallenge.garage.application.customer.list.ListCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.update.UpdateCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.update.UpdateCustomerUseCase.UpdateCustomerCmd;
 import com.fiapchallenge.garage.domain.customer.Customer;
-import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
-import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
-
-import java.util.UUID;
-import jakarta.validation.Valid;
 import com.fiapchallenge.garage.shared.pagination.CustomPageRequest;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import static com.fiapchallenge.garage.application.customer.list.ListCustomerUseCase.*;
+import java.util.UUID;
+
+import static com.fiapchallenge.garage.application.customer.list.ListCustomerUseCase.CustomerFilterCmd;
 
 @RestController
 @RequestMapping("/customers")
