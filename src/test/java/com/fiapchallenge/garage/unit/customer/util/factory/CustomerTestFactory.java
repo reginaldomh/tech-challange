@@ -2,7 +2,6 @@ package com.fiapchallenge.garage.unit.customer.util.factory;
 
 import com.fiapchallenge.garage.domain.customer.CpfCnpj;
 import com.fiapchallenge.garage.domain.customer.Customer;
-import com.fiapchallenge.garage.application.commands.customer.CreateCustomerCommand;
 
 import java.util.UUID;
 

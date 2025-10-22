@@ -14,7 +14,6 @@ public interface UpdateCustomerUseCase {
        UUID id,
        String name,
        String email,
-       String phone,
-       String cpfCnpj
+       String phone
     ) {}
 }

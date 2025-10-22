@@ -2,6 +2,7 @@ package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
 
+import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase.CreateCustomerCommand;
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase.DeleteCustomerCmd;
 import com.fiapchallenge.garage.application.customer.list.ListCustomerUseCase;
@@ -10,7 +11,6 @@ import com.fiapchallenge.garage.application.customer.update.UpdateCustomerUseCas
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
 import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
-import com.fiapchallenge.garage.application.commands.customer.CreateCustomerCommand;
 
 import java.util.UUID;
 import jakarta.validation.Valid;
@@ -49,7 +49,7 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
         CustomerFilterCmd filter = new CustomerFilterCmd(name, email, cpfCnpj);
 
         Pageable pageable = CustomPageRequest.of(page, size);
-        Page<Customer> customers = listCustomersService.list(filter, pageable);
+        Page<Customer> customers = listCustomersUseCase.handle(filter, pageable);
 
         return ResponseEntity.ok(customers);
     }

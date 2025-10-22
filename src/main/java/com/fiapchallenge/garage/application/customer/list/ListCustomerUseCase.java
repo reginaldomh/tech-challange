@@ -2,12 +2,12 @@ package com.fiapchallenge.garage.application.customer.list;
 
 import com.fiapchallenge.garage.domain.customer.Customer;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ListCustomerUseCase {
 
-    List<Customer> handle(CustomerFilterCmd filter);
+    Page<Customer> handle(CustomerFilterCmd filter, Pageable pageable);
 
     @Schema(name = "CustomerFilter", description = "Filtros para busca de clientes")
     public record CustomerFilterCmd(

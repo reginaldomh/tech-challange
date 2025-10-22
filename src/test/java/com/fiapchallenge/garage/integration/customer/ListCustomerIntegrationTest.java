@@ -2,7 +2,6 @@ package com.fiapchallenge.garage.integration.customer;
 
 import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
 import com.fiapchallenge.garage.application.customer.CreateCustomerService;
-import com.fiapchallenge.garage.application.customer.CreateCustomerUseCase;
 import com.fiapchallenge.garage.integration.BaseIntegrationTest;
 import com.fiapchallenge.garage.integration.fixtures.CustomerFixture;
 import org.junit.jupiter.api.DisplayName;

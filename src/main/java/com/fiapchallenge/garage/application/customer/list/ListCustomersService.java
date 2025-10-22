@@ -7,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 public class ListCustomersService implements ListCustomerUseCase {
@@ -19,15 +17,8 @@ public class ListCustomersService implements ListCustomerUseCase {
         this.customerRepository = customerRepository;
     }
 
-    public List<Customer> handle(ListCustomerUseCase.CustomerFilterCmd filter) {
-        if (!filter.hasFilters()) {
-            return customerRepository.findAll();
-        }
-
-        return customerRepository.findByFilters(filter.name(), filter.email(), filter.cpfCnpj());
-    }
-
-    public Page<Customer> list(CustomerFilterCmd filter, Pageable pageable) {
+    @Override
+    public Page<Customer> handle(CustomerFilterCmd filter, Pageable pageable) {
         if (!filter.hasFilters()) {
             return customerRepository.findAll(pageable);
         }

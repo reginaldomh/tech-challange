@@ -59,7 +59,9 @@ public interface CustomerControllerOpenApiSpec {
     ResponseEntity<Page<Customer>> list(
         @Parameter(name = "name", description = "Filtrar por nome do cliente") @RequestParam(required = false) String name,
         @Parameter(name = "email", description = "Filtrar por email do cliente") @RequestParam(required = false) String email,
-        @Parameter(name = "cpfCnpj", description = "Filtrar por CPF/CNPJ do cliente") @RequestParam(required = false) String cpfCnpj);
+        @Parameter(name = "cpfCnpj", description = "Filtrar por CPF/CNPJ do cliente") @RequestParam(required = false) String cpfCnpj,
+        @Parameter(name = "page", description = "Número da página (inicia em 0)") @RequestParam(required = false) Integer page,
+        @Parameter(name = "size", description = "Tamanho da página") @RequestParam(required = false) Integer size);
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar um cliente", description = "Remove um cliente existente")

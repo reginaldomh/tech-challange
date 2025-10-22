@@ -1,6 +1,5 @@
 package com.fiapchallenge.garage.application.customer.create;
 
-import com.fiapchallenge.garage.application.validation.CpfCnpj;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +11,6 @@ public interface CreateCustomerUseCase {
             @NotNull String name,
             @NotNull String email,
             @NotNull String phone,
-            @NotNull @CpfCnpj String cpfCnpj
+            @NotNull String cpfCnpj
     ) {}
 }
