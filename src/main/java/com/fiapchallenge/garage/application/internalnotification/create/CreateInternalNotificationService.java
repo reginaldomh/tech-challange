@@ -1,12 +1,9 @@
-package com.fiapchallenge.garage.application.internalnotification;
+package com.fiapchallenge.garage.application.internalnotification.create;
 
-import com.fiapchallenge.garage.application.internalnotification.command.CreateInternalNotificationCommand;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotification;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotificationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @Transactional

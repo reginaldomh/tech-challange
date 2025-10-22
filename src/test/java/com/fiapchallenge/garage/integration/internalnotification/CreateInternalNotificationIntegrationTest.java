@@ -1,7 +1,8 @@
-package com.fiapchallenge.garage.integration;
+package com.fiapchallenge.garage.integration.internalnotification;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.InternalNotificationEntity;
 import com.fiapchallenge.garage.adapters.outbound.repositories.internalnotification.JpaInternalNotificationRepository;
+import com.fiapchallenge.garage.integration.BaseIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class InternalNotificationIntegrationTest extends BaseIntegrationTest {
+public class CreateInternalNotificationIntegrationTest extends BaseIntegrationTest {
 
     private final MockMvc mockMvc;
     private final JpaInternalNotificationRepository internalNotificationRepository;
 
     @Autowired
-    public InternalNotificationIntegrationTest(MockMvc mockMvc, JpaInternalNotificationRepository internalNotificationRepository) {
+    public CreateInternalNotificationIntegrationTest(MockMvc mockMvc, JpaInternalNotificationRepository internalNotificationRepository) {
         this.mockMvc = mockMvc;
         this.internalNotificationRepository = internalNotificationRepository;
     }

@@ -1,6 +1,6 @@
 package com.fiapchallenge.garage.unit.internalnotification.utils.factory;
 
-import com.fiapchallenge.garage.application.internalnotification.command.CreateInternalNotificationCommand;
+import com.fiapchallenge.garage.application.internalnotification.create.CreateInternalNotificationUseCase;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotification;
 import com.fiapchallenge.garage.domain.internalnotification.NotificationType;
 
@@ -16,8 +16,8 @@ public class InternalNotificationTestFactory {
     public static final String MESSAGE = "Low stock alert";
     public static final LocalDateTime CREATED_AT = LocalDateTime.now();
 
-    public static CreateInternalNotificationCommand createCommand() {
-        return new CreateInternalNotificationCommand(
+    public static CreateInternalNotificationUseCase.CreateInternalNotificationCommand createCommand() {
+        return new CreateInternalNotificationUseCase.CreateInternalNotificationCommand(
                 TYPE,
                 RESOURCE_ID,
                 MESSAGE

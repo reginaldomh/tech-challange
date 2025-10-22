@@ -3,6 +3,8 @@ package com.fiapchallenge.garage.adapters.outbound.repositories.internalnotifica
 import com.fiapchallenge.garage.adapters.outbound.entities.InternalNotificationEntity;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotification;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotificationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -33,6 +35,12 @@ public class InternalNotificationRepositoryImpl implements InternalNotificationR
     @Override
     public Optional<InternalNotification> findById(UUID id) {
         return jpaInternalNotificationRepository.findById(id)
+                .map(this::convertFromEntity);
+    }
+
+    @Override
+    public Page<InternalNotification> findAll(Pageable pageable) {
+        return jpaInternalNotificationRepository.findAll(pageable)
                 .map(this::convertFromEntity);
     }
 

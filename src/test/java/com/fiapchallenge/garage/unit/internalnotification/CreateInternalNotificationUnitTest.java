@@ -1,7 +1,7 @@
 package com.fiapchallenge.garage.unit.internalnotification;
 
-import com.fiapchallenge.garage.application.internalnotification.CreateInternalNotificationService;
-import com.fiapchallenge.garage.application.internalnotification.command.CreateInternalNotificationCommand;
+import com.fiapchallenge.garage.application.internalnotification.create.CreateInternalNotificationService;
+import com.fiapchallenge.garage.application.internalnotification.create.CreateInternalNotificationUseCase;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotification;
 import com.fiapchallenge.garage.domain.internalnotification.InternalNotificationRepository;
 import com.fiapchallenge.garage.unit.internalnotification.utils.factory.InternalNotificationTestFactory;
@@ -32,7 +32,7 @@ public class CreateInternalNotificationUnitTest {
         when(internalNotificationRepository.save(any(InternalNotification.class)))
                 .thenReturn(InternalNotificationTestFactory.createInternalNotification());
 
-        CreateInternalNotificationCommand command = InternalNotificationTestFactory.createCommand();
+        CreateInternalNotificationUseCase.CreateInternalNotificationCommand command = InternalNotificationTestFactory.createCommand();
         InternalNotification result = createInternalNotificationService.handle(command);
 
         assertEquals(InternalNotificationTestFactory.ID, result.getId());
