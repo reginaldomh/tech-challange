@@ -1,18 +1,19 @@
-package com.fiapchallenge.garage.utils;
+package com.fiapchallenge.garage.integration.fixtures;
 
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase.CreateCustomerCommand;
 import com.fiapchallenge.garage.domain.customer.Customer;
 
-public class CustomerMockUtils {
+public class CustomerFixture {
 
     public static Customer createCustomer(CreateCustomerUseCase createCustomerUseCase) {
         CreateCustomerCommand command = new CreateCustomerCommand(
-                "John Doe",
-                "john@example.com",
-                "123456789",
-                "11144477735"
+            "John Doe",
+            "john@example.com",
+            "123456789",
+            "60850254086"
         );
+
         return createCustomerUseCase.handle(command);
     }
 

@@ -2,8 +2,6 @@ package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
 
-import java.util.List;
-
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase.DeleteCustomerCmd;
 import com.fiapchallenge.garage.application.customer.list.ListCustomerUseCase;
@@ -12,13 +10,16 @@ import com.fiapchallenge.garage.application.customer.update.UpdateCustomerUseCas
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
 import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
+import com.fiapchallenge.garage.application.commands.customer.CreateCustomerCommand;
 
 import java.util.UUID;
 import jakarta.validation.Valid;
+import com.fiapchallenge.garage.shared.pagination.CustomPageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase.*;
 import static com.fiapchallenge.garage.application.customer.list.ListCustomerUseCase.*;
 
 @RestController
@@ -39,9 +40,17 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<Customer>> list(@RequestParam(required = false) String name, @RequestParam(required = false) String email, @RequestParam(required = false) String cpfCnpj) {
+    public ResponseEntity<Page<Customer>> list(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String cpfCnpj,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
         CustomerFilterCmd filter = new CustomerFilterCmd(name, email, cpfCnpj);
-        List<Customer> customers = listCustomersUseCase.handle(filter);
+
+        Pageable pageable = CustomPageRequest.of(page, size);
+        Page<Customer> customers = listCustomersService.list(filter, pageable);
+
         return ResponseEntity.ok(customers);
     }
 
@@ -66,8 +75,7 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
                 id,
                 updateCustomerDTO.name(),
                 updateCustomerDTO.email(),
-                updateCustomerDTO.phone(),
-                updateCustomerDTO.cpfCnpj()
+                updateCustomerDTO.phone()
         );
 
         Customer customer = updateCustomerUseCase.handle(cmd);

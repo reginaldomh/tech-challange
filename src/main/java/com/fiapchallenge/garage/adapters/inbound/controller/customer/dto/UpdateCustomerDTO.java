@@ -1,6 +1,5 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.customer.dto;
 
-import com.fiapchallenge.garage.application.validation.CpfCnpj;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
@@ -8,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 public record UpdateCustomerDTO(
         @NotNull(message = "Necessário informar o nome do cliente") String name,
         @NotNull(message = "Necessário informar o email do cliente") String email,
-        @NotNull(message = "Necessário informar o telefone do cliente") String phone,
-        @NotNull(message = "Necessário informar o CPF/CNPJ do cliente") @CpfCnpj String cpfCnpj
+        @NotNull(message = "Necessário informar o telefone do cliente") String phone
 ) {
 }

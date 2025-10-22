@@ -1,10 +1,9 @@
-package com.fiapchallenge.garage.integration;
+package com.fiapchallenge.garage.integration.customer;
 
 import com.fiapchallenge.garage.adapters.outbound.repositories.customer.JpaCustomerRepository;
 import com.fiapchallenge.garage.adapters.outbound.entities.CustomerEntity;
-import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
+import com.fiapchallenge.garage.integration.BaseIntegrationTest;
 import com.fiapchallenge.garage.domain.customer.Customer;
-import com.fiapchallenge.garage.utils.CustomerMockUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +17,20 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CustomerIntegrationTest extends BaseIntegrationTest {
+public class CreateCustomerIntegrationTest extends BaseIntegrationTest {
 
     private final MockMvc mockMvc;
     private final JpaCustomerRepository customerRepository;
-    private final CreateCustomerUseCase createCustomerUseCase;
 
     @Autowired
-    public CustomerIntegrationTest(MockMvc mockMvc, JpaCustomerRepository customerRepository, CreateCustomerUseCase createCustomerUseCase) {
+    public CreateCustomerIntegrationTest(MockMvc mockMvc, JpaCustomerRepository customerRepository) {
         this.mockMvc = mockMvc;
         this.customerRepository = customerRepository;
-        this.createCustomerUseCase = createCustomerUseCase;
     }
 
     @Test
@@ -66,53 +60,6 @@ public class CustomerIntegrationTest extends BaseIntegrationTest {
         assertThat(savedCustomer.getPhone()).isEqualTo("123456789");
         assertThat(savedCustomer.getCpfCnpj()).isEqualTo("11144477735");
         assertThat(savedCustomer.getId()).isNotNull();
-    }
-
-    @Test
-    @DisplayName("Deve atualizar um cliente existente")
-    void shouldUpdateExistingCustomer() throws Exception {
-        Customer createdCustomer = CustomerMockUtils.createCustomer(createCustomerUseCase);
-
-        String updateCustomerJson = """
-                {
-                  "name": "Jane Doe",
-                  "email": "jane@example.com",
-                  "phone": "987654321",
-                  "cpfCnpj": "11222333000181"
-                }
-                """;
-
-        mockMvc.perform(put("/customers/" + createdCustomer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(updateCustomerJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Jane Doe"))
-                .andExpect(jsonPath("$.email").value("jane@example.com"))
-                .andExpect(jsonPath("$.phone").value("987654321"))
-                .andExpect(jsonPath("$.cpfCnpj").value("11222333000181"));
-
-        CustomerEntity updatedCustomer = customerRepository.findById(createdCustomer.getId()).get();
-        assertThat(updatedCustomer.getName()).isEqualTo("Jane Doe");
-        assertThat(updatedCustomer.getEmail()).isEqualTo("jane@example.com");
-        assertThat(updatedCustomer.getPhone()).isEqualTo("987654321");
-        assertThat(updatedCustomer.getCpfCnpj()).isEqualTo("11222333000181");
-        assertThat(updatedCustomer.getId()).isEqualTo(createdCustomer.getId());
-    }
-
-    @Test
-    @DisplayName("Deve listar todos os clientes")
-    void shouldListAllCustomers() throws Exception {
-        CustomerMockUtils.createCustomer(createCustomerUseCase);
-        CustomerMockUtils.createCustomer(createCustomerUseCase, "Jane Smith", "jane@example.com", "987654321", "11222333000181");
-
-        mockMvc.perform(get("/customers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").value("John Doe"))
-                .andExpect(jsonPath("$[1].name").value("Jane Smith"));
-
-        assertThat(customerRepository.findAll()).hasSize(2);
     }
 
     @Test

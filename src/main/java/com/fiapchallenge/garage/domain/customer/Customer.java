@@ -1,7 +1,5 @@
 package com.fiapchallenge.garage.domain.customer;
 
-import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
-
 import java.util.UUID;
 
 public class Customer {
@@ -10,16 +8,9 @@ public class Customer {
     private String name;
     private String email;
     private String phone;
-    private String cpfCnpj;
+    private CpfCnpj cpfCnpj;
 
-    public Customer(CreateCustomerUseCase.CreateCustomerCommand customerRequestDTO) {
-        this.name = customerRequestDTO.name();
-        this.email = customerRequestDTO.email();
-        this.phone = customerRequestDTO.phone();
-        this.cpfCnpj = customerRequestDTO.cpfCnpj();
-    }
-
-    public Customer(UUID id, String name, String email, String phone, String cpfCnpj) {
+    public Customer(UUID id, String name, String email, String phone, CpfCnpj cpfCnpj) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -63,12 +54,17 @@ public class Customer {
         return this;
     }
 
-    public String getCpfCnpj() {
+    public CpfCnpj getCpfCnpj() {
         return cpfCnpj;
     }
 
+    @JsonProperty("cpfCnpj")
+    public String getCpfCnpjValue() {
+        return cpfCnpj.getValue();
+    }
+
     public Customer setCpfCnpj(String cpfCnpj) {
-        this.cpfCnpj = cpfCnpj;
+        this.cpfCnpj = new CpfCnpj(cpfCnpj);
         return this;
     }
 }

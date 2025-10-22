@@ -2,6 +2,8 @@ package com.fiapchallenge.garage.application.customer.list;
 
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,5 +25,13 @@ public class ListCustomersService implements ListCustomerUseCase {
         }
 
         return customerRepository.findByFilters(filter.name(), filter.email(), filter.cpfCnpj());
+    }
+
+    public Page<Customer> list(CustomerFilterCmd filter, Pageable pageable) {
+        if (!filter.hasFilters()) {
+            return customerRepository.findAll(pageable);
+        }
+
+        return customerRepository.findByFilters(filter.name(), filter.email(), filter.cpfCnpj(), pageable);
     }
 }
