@@ -69,4 +69,11 @@ public class ServiceOrder {
         }
         this.status = ServiceOrderStatus.AWAITING_APPROVAL;
     }
+
+    public void start() {
+        if (this.status != ServiceOrderStatus.AWAITING_APPROVAL) {
+            throw new IllegalStateException("Service order must be in AWAITING_APPROVAL status to be approved.");
+        }
+        this.status = ServiceOrderStatus.IN_PROGRESS;
+    }
 }
