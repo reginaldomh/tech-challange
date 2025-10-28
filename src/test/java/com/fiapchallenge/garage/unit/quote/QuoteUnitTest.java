@@ -4,7 +4,7 @@ import com.fiapchallenge.garage.application.quote.ApproveQuoteService;
 import com.fiapchallenge.garage.application.quote.CreateQuoteService;
 import com.fiapchallenge.garage.application.quote.command.ApproveQuoteCommand;
 import com.fiapchallenge.garage.application.quote.command.CreateQuoteCommand;
-import com.fiapchallenge.garage.application.serviceorder.StartServiceOrderUseCase;
+import com.fiapchallenge.garage.application.serviceorder.StartServiceOrderExecutionUseCase;
 import com.fiapchallenge.garage.domain.quote.Quote;
 import com.fiapchallenge.garage.domain.quote.QuoteRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
@@ -43,7 +43,7 @@ public class QuoteUnitTest {
     private ApproveQuoteService approveQuoteService;
 
     @Mock
-    private StartServiceOrderUseCase approveServiceOrderUseCase;
+    private StartServiceOrderExecutionUseCase approveServiceOrderUseCase;
 
     @Test
     @DisplayName("Criação de Orçamento")

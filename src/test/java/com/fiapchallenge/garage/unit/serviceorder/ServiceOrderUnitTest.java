@@ -4,9 +4,8 @@ import com.fiapchallenge.garage.application.quote.CreateQuoteUseCase;
 import com.fiapchallenge.garage.application.quote.command.CreateQuoteCommand;
 import com.fiapchallenge.garage.application.serviceorder.*;
 import com.fiapchallenge.garage.application.serviceorder.command.FinishServiceOrderDiagnosticCommand;
-import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderCommand;
+import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderExecutionCommand;
 import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderDiagnosticCommand;
-import com.fiapchallenge.garage.domain.customer.CustomerRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
@@ -51,7 +50,7 @@ public class ServiceOrderUnitTest {
     private FinishServiceOrderDiagnosticService finishServiceOrderDiagnosticService;
 
     @InjectMocks
-    private StartServiceOrderService startServiceOrderService;
+    private StartServiceOrderExecutionService startServiceOrderService;
 
     @Test
     @DisplayName("Criação de Ordem de Serviço")
@@ -107,7 +106,7 @@ public class ServiceOrderUnitTest {
         Optional<ServiceOrder> mockedServiceOrder = Optional.of(ServiceOrderTestFactory.createServiceOrder(vehicleId, ServiceOrderStatus.AWAITING_APPROVAL));
         when(serviceOrderRepository.findById(any(UUID.class))).thenReturn(mockedServiceOrder);
 
-        ServiceOrder serviceOrder = startServiceOrderService.handle(new StartServiceOrderCommand(ServiceOrderTestFactory.ID));
+        ServiceOrder serviceOrder = startServiceOrderService.handle(new StartServiceOrderExecutionCommand(ServiceOrderTestFactory.ID));
 
         assertEquals(ServiceOrderStatus.IN_PROGRESS, serviceOrder.getStatus());
         verify(serviceOrderRepository).save(serviceOrder);
