@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table(name = "service_order")
+@Table(name = "service_order_execution")
 @Entity
 public class ServiceOrderExecutionEntity {
 
