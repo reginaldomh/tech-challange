@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ServiceOrderUnitTest {
+class ServiceOrderUnitTest {
 
     @Mock
     ServiceTypeRepository serviceTypeRepository;
@@ -38,6 +38,9 @@ public class ServiceOrderUnitTest {
     @Mock
     ServiceOrderRepository serviceOrderRepository;
     
+    @Mock
+    ServiceOrderExecutionRepository serviceOrderExecutionRepository;
+
     @Mock
     ServiceOrderExecutionRepository serviceOrderExecutionRepository;
 
