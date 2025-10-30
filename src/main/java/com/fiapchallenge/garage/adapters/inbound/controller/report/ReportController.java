@@ -1,12 +1,7 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.report;
 
+import com.fiapchallenge.garage.application.report.command.GenerateServiceOrderExecutionReportCommand;
 import com.fiapchallenge.garage.application.report.service.GenerateServiceOrderExecutionReportUseCase;
-import com.fiapchallenge.garage.application.report.service.command.GenerateServiceOrderExecutionReportCommand;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,12 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/reports")

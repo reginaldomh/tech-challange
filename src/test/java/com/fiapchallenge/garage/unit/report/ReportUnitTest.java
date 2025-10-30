@@ -1,7 +1,7 @@
 package com.fiapchallenge.garage.unit.report;
 
+import com.fiapchallenge.garage.application.report.command.GenerateServiceOrderExecutionReportCommand;
 import com.fiapchallenge.garage.application.report.service.GenerateServiceOrderExecutionReportService;
-import com.fiapchallenge.garage.application.report.service.command.GenerateServiceOrderExecutionReportCommand;
 import com.fiapchallenge.garage.domain.serviceorderexecution.ServiceOrderExecution;
 import com.fiapchallenge.garage.domain.serviceorderexecution.ServiceOrderExecutionRepository;
 import org.junit.jupiter.api.BeforeEach;
