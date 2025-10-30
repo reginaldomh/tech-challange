@@ -37,9 +37,6 @@ class ServiceOrderUnitTest {
 
     @Mock
     ServiceOrderRepository serviceOrderRepository;
-    
-    @Mock
-    ServiceOrderExecutionRepository serviceOrderExecutionRepository;
 
     @Mock
     ServiceOrderExecutionRepository serviceOrderExecutionRepository;

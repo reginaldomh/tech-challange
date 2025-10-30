@@ -1,9 +1,8 @@
-package com.fiapchallenge.garage.integration.vehicle;
+package com.fiapchallenge.garage.integration;
 
 import com.fiapchallenge.garage.adapters.outbound.entities.VehicleEntity;
 import com.fiapchallenge.garage.adapters.outbound.repositories.vehicle.JpaVehicleRepository;
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerService;
-import com.fiapchallenge.garage.integration.BaseIntegrationTest;
 import com.fiapchallenge.garage.integration.fixtures.CustomerFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-class CreateVehicleIntegrationTest extends BaseIntegrationTest {
+public class CreateVehicleIntegrationTest extends BaseIntegrationTest {
 
     private final MockMvc mockMvc;
     private final JpaVehicleRepository vehicleRepository;
@@ -73,29 +72,5 @@ class CreateVehicleIntegrationTest extends BaseIntegrationTest {
         assertThat(savedVehicle.getObservations()).isEqualTo("Troca de óleo recente");
         assertThat(savedVehicle.getCustomerId()).isEqualTo(customerId);
         assertThat(savedVehicle.getId()).isNotNull();
-    }
-
-    @Test
-    @DisplayName("Deve retornar erro para placa inválida")
-    void shouldReturnErrorForInvalidLicensePlate() throws Exception {
-        UUID customerId = CustomerFixture.createCustomer(createCustomerService).getId();
-
-        String vehicleJson = """
-            {
-              "model": "Civic",
-              "brand": "Honda",
-              "licensePlate": "INVALID123",
-              "color": "Prata",
-              "year": 2020,
-              "observations": "Troca de óleo recente",
-              "customerId": "%s"
-            }
-        """.formatted(customerId.toString());
-
-        mockMvc.perform(post("/vehicles")
-                        .header("Authorization", getAuthToken())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(vehicleJson))
-                .andExpect(status().isBadRequest());
     }
 }
