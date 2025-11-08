@@ -2,6 +2,8 @@ package com.fiapchallenge.garage.unit.quote;
 
 import com.fiapchallenge.garage.application.quote.ApproveQuoteService;
 import com.fiapchallenge.garage.application.quote.RejectQuoteService;
+import com.fiapchallenge.garage.application.serviceorder.StartServiceOrderExecutionUseCase;
+import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderExecutionCommand;
 import com.fiapchallenge.garage.domain.quote.Quote;
 import com.fiapchallenge.garage.domain.quote.QuoteRepository;
 import com.fiapchallenge.garage.domain.quote.QuoteStatus;
@@ -30,11 +32,15 @@ class QuoteApprovalUnitTest {
     @Mock
     private ServiceOrderRepository serviceOrderRepository;
 
+    @Mock
+    private StartServiceOrderExecutionUseCase startServiceOrderExecutionUseCase;
+
     @InjectMocks
     private ApproveQuoteService approveQuoteService;
 
     @InjectMocks
     private RejectQuoteService rejectQuoteService;
+
 
     @Test
     void shouldChangeServiceOrderToInProgressWhenQuoteIsApproved() {
@@ -49,11 +55,12 @@ class QuoteApprovalUnitTest {
         when(serviceOrderRepository.findByIdOrThrow(serviceOrderId)).thenReturn(serviceOrder);
         when(quoteRepository.save(any(Quote.class))).thenReturn(quote);
         when(serviceOrderRepository.save(any(ServiceOrder.class))).thenReturn(serviceOrder);
-
+        when(startServiceOrderExecutionUseCase.handle(any(StartServiceOrderExecutionCommand.class))).thenReturn(serviceOrder);
         Quote result = approveQuoteService.handle(serviceOrderId);
 
         assertEquals(QuoteStatus.APPROVED, result.getStatus());
         verify(serviceOrderRepository).save(argThat(so -> so.getStatus() == ServiceOrderStatus.IN_PROGRESS));
+        verify(startServiceOrderExecutionUseCase).handle(any());
     }
 
     @Test
