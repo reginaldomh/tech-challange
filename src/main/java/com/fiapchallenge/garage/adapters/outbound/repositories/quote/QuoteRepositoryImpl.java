@@ -1,74 +1,74 @@
 package com.fiapchallenge.garage.adapters.outbound.repositories.quote;
 
+import com.fiapchallenge.garage.adapters.outbound.entities.QuoteEntity;
+import com.fiapchallenge.garage.adapters.outbound.entities.QuoteItemEntity;
 import com.fiapchallenge.garage.domain.quote.Quote;
+import com.fiapchallenge.garage.domain.quote.QuoteItem;
 import com.fiapchallenge.garage.domain.quote.QuoteRepository;
 import com.fiapchallenge.garage.shared.exception.ResourceNotFoundException;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Repository
+@Component
 public class QuoteRepositoryImpl implements QuoteRepository {
 
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final QuoteRowMapper quoteRowMapper;
+    private final JpaQuoteRepository jpaQuoteRepository;
 
-    public QuoteRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate, QuoteRowMapper quoteRowMapper) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.quoteRowMapper = quoteRowMapper;
+    public QuoteRepositoryImpl(JpaQuoteRepository jpaQuoteRepository) {
+        this.jpaQuoteRepository = jpaQuoteRepository;
     }
 
     @Override
     public Quote save(Quote quote) {
-        String quoteSql = """
-            INSERT INTO quote (service_order_id, total_amount, status, created_at)
-            VALUES (:serviceOrderId, :totalAmount, :status, :createdAt)
-            ON CONFLICT (service_order_id)
-            DO UPDATE SET status = :status, total_amount = :totalAmount
-            RETURNING id
-            """;
+        QuoteEntity quoteEntity = new QuoteEntity(quote);
 
-        UUID quoteId = jdbcTemplate.queryForObject(quoteSql, Map.of(
-            "serviceOrderId", quote.getServiceOrderId(),
-            "totalAmount", quote.getTotalAmount(),
-            "status", quote.getStatus().name(),
-            "createdAt", quote.getCreatedAt()
-        ), UUID.class);
-
-        jdbcTemplate.update("DELETE FROM quote_item WHERE quote_id = :quoteId", Map.of("quoteId", quoteId));
-
-        String itemSql = """
-            INSERT INTO quote_item (quote_id, description, unit_price, quantity, type)
-            VALUES (:quoteId, :description, :unitPrice, :quantity, :type)
-            """;
-
-        for (var item : quote.getItems()) {
-            jdbcTemplate.update(itemSql, Map.of(
-                "quoteId", quoteId,
-                "description", item.getDescription(),
-                "unitPrice", item.getUnitPrice(),
-                "quantity", item.getQuantity(),
-                "type", item.getType().name()
-            ));
+        if (quote.getItems() != null) {
+            final QuoteEntity finalQuoteEntity = quoteEntity;
+            var itemEntities = quote.getItems().stream()
+                .map(item -> {
+                    QuoteItemEntity itemEntity = new QuoteItemEntity(item);
+                    itemEntity.setQuote(finalQuoteEntity);
+                    return itemEntity;
+                })
+                .collect(Collectors.toList());
+            quoteEntity.setItems(itemEntities);
         }
 
-        return quote;
+        quoteEntity = jpaQuoteRepository.save(quoteEntity);
+        return convertFromEntity(quoteEntity);
     }
 
     @Override
     public Quote findByServiceOrderIdOrThrow(UUID serviceOrderId) {
-        String sql = "SELECT * FROM quote WHERE service_order_id = :serviceOrderId";
+        return jpaQuoteRepository.findByServiceOrderId(serviceOrderId)
+            .map(this::convertFromEntity)
+            .orElseThrow(() -> new ResourceNotFoundException("Quote not found for service order: " + serviceOrderId));
+    }
 
-        List<Quote> result = jdbcTemplate.query(sql, Map.of("serviceOrderId", serviceOrderId), quoteRowMapper);
-        if (result == null) {
-            throw new ResourceNotFoundException("Quote not found for service order: " + serviceOrderId);
-        }
+    private Quote convertFromEntity(QuoteEntity entity) {
+        var items = entity.getItems() != null ?
+            entity.getItems().stream()
+                .map(this::convertItemFromEntity)
+                .collect(Collectors.toList()) : null;
 
-        return result.stream()
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Quote not found for service order: " + serviceOrderId));
+        return new Quote(
+            entity.getId(),
+            entity.getCustomerId(),
+            entity.getServiceOrderId(),
+            items,
+            entity.getStatus(),
+            entity.getCreatedAt()
+        );
+    }
+
+    private QuoteItem convertItemFromEntity(QuoteItemEntity entity) {
+        return new QuoteItem(
+            entity.getDescription(),
+            entity.getUnitPrice(),
+            entity.getQuantity(),
+            entity.getType()
+        );
     }
 }

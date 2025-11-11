@@ -6,13 +6,27 @@ import java.util.List;
 import java.util.UUID;
 
 public class Quote {
-    private final UUID serviceOrderId;
-    private final List<QuoteItem> items;
-    private final BigDecimal totalAmount;
-    private final LocalDateTime createdAt;
+
+    private UUID id;
+    private UUID customerId;
+    private UUID serviceOrderId;
+    private List<QuoteItem> items;
+    private BigDecimal totalAmount;
+    private LocalDateTime createdAt;
     private QuoteStatus status;
 
-    public Quote(UUID serviceOrderId, List<QuoteItem> items) {
+    public Quote(UUID id, UUID customerId, UUID serviceOrderId, List<QuoteItem> items, QuoteStatus status, LocalDateTime createdAt) {
+        this.id = id;
+        this.customerId = customerId;
+        this.serviceOrderId = serviceOrderId;
+        this.items = items;
+        this.totalAmount = calculateTotal();
+        this.createdAt = createdAt;
+        this.status = status;
+    }
+
+    public Quote(UUID customerId, UUID serviceOrderId, List<QuoteItem> items) {
+        this.customerId = customerId;
         this.serviceOrderId = serviceOrderId;
         this.items = items;
         this.totalAmount = calculateTotal();
@@ -29,6 +43,8 @@ public class Quote {
     public void approve() { this.status = QuoteStatus.APPROVED; }
     public void reject() { this.status = QuoteStatus.REJECTED; }
 
+    public UUID getId() { return id; }
+    public UUID getCustomerId() { return customerId; }
     public UUID getServiceOrderId() { return serviceOrderId; }
     public List<QuoteItem> getItems() { return items; }
     public BigDecimal getTotalAmount() { return totalAmount; }
