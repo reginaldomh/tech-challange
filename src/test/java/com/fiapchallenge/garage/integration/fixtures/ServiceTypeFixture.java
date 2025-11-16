@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class ServiceTypeFixture {
 
     public static final BigDecimal VALUE = new BigDecimal("150.00");
-    public static final String DESCRIPTION = "Trcola de óleo";
+    public static final String DESCRIPTION = "Troca de óleo";
 
     public static ServiceType createServiceType(CreateServiceTypeService createServiceTypeService) {
         CreateServiceTypeCommand command = buildCommand();

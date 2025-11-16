@@ -10,4 +10,10 @@ public interface ServiceTypeRepository {
     ServiceType findByIdOrThrow(UUID serviceTypeId);
 
     List<ServiceType> findAll();
+
+    java.util.Optional<ServiceType> findById(UUID id);
+
+    boolean exists(UUID id);
+
+    void deleteById(UUID id);
 }

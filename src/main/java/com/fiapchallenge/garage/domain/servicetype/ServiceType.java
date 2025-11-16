@@ -33,4 +33,12 @@ public class ServiceType {
     public String getDescription() {
         return description;
     }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -2,7 +2,7 @@ spring:
   application:
     name: garage
   datasource:
-    url: jdbc:postgresql://localhost:5432/garage
+    url: jdbc:postgresql://localhost:5432/garage?currentSchema=public
     username: secret
     password: secret
     driver-class-name: org.postgresql.Driver
@@ -12,9 +12,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_schema: public
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: true
+    schemas: public
     locations: classpath:db/migration
 
 api:
