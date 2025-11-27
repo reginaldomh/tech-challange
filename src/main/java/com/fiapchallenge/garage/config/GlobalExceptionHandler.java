@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,11 +41,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
-        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
-    }
-
     @ExceptionHandler(ReportErrorException.class)
     public ResponseEntity<Map<String, String>> handleReportErrorException(ReportErrorException ex) {
         return ResponseEntity.internalServerError().body(Map.of("error", ex.getMessage()));
@@ -53,6 +49,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SoatNotFoundException.class)
     public ResponseEntity<String> handleSoatNotFoundException(SoatNotFoundException ex) {
         return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity.status(403).body(Map.of("error", "Acesso negado"));
     }
 
     @ExceptionHandler

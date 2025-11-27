@@ -27,7 +27,8 @@ public class CreateUserService implements CreateUserUseCase {
                 null,
                 command.fullname(),
                 command.email(),
-                encryptedPassword
+                encryptedPassword,
+                command.role()
         );
 
         return userRepository.create(user);

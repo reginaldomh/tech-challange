@@ -2,6 +2,7 @@ package com.fiapchallenge.garage.unit.user.utils.factory;
 
 import com.fiapchallenge.garage.application.user.command.CreateUserCommand;
 import com.fiapchallenge.garage.domain.user.User;
+import com.fiapchallenge.garage.domain.user.UserRole;
 
 import java.util.UUID;
 
@@ -17,7 +18,8 @@ public class UserTestFactory {
         return new CreateUserCommand(
                 FULLNAME,
                 EMAIL,
-                PASSWORD
+                PASSWORD,
+                UserRole.ADMIN
         );
     }
 
@@ -26,7 +28,8 @@ public class UserTestFactory {
                 ID,
                 FULLNAME,
                 EMAIL,
-                ENCRYPTED_PASSWORD
+                ENCRYPTED_PASSWORD,
+                UserRole.ADMIN
         );
     }
 }

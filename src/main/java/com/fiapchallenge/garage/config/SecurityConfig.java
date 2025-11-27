@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final UserSecurityFilter userAuthenticationFilter;
@@ -48,17 +50,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) //NOSONAR
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers("/users/login").permitAll()
-                        .requestMatchers(ENDPOINT_SWAGGER).permitAll()
-                        .requestMatchers("/", "/robots.txt", "/sitemap.xml").permitAll()
-                        .requestMatchers("/public/service-orders/**").permitAll()
-                        .anyRequest().authenticated()
-                ).sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny));
+            .csrf(AbstractHttpConfigurer::disable) //NOSONAR
+            .authorizeHttpRequests(requests -> requests
+                .requestMatchers("/users/login").permitAll()
+                .requestMatchers(ENDPOINT_SWAGGER).permitAll()
+                .requestMatchers("/", "/robots.txt", "/sitemap.xml").permitAll()
+                .requestMatchers("/public/service-orders/**").permitAll()
+                .anyRequest().authenticated()
+            ).sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny));
         return http.build();
     }
 }

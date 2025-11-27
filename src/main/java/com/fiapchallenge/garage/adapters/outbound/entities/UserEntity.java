@@ -1,9 +1,7 @@
 package com.fiapchallenge.garage.adapters.outbound.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fiapchallenge.garage.domain.user.UserRole;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -17,15 +15,20 @@ public class UserEntity {
     private String fullname;
     private String email;
     private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
     public UserEntity() {
     }
 
-    public UserEntity(UUID id, String fullname, String email, String password) {
+    public UserEntity(UUID id, String fullname, String email, String password, UserRole role) {
         this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -61,6 +64,15 @@ public class UserEntity {
 
     public UserEntity setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public UserEntity setRole(UserRole role) {
+        this.role = role;
         return this;
     }
 }

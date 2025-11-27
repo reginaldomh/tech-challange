@@ -2,7 +2,9 @@ package com.fiapchallenge.garage.integration;
 
 import com.fiapchallenge.garage.application.user.CreateUserService;
 import com.fiapchallenge.garage.application.user.LoginUserService;
+import com.fiapchallenge.garage.application.user.command.CreateUserCommand;
 import com.fiapchallenge.garage.domain.user.User;
+import com.fiapchallenge.garage.domain.user.UserRole;
 import com.fiapchallenge.garage.integration.fixtures.UserFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +30,17 @@ public abstract class BaseIntegrationTest {
     }
 
     protected String getAuthToken() {
-        User user = UserFixture.createUser(createUserService);
-        return "Bearer " + UserFixture.login(user.getEmail(), loginUserService);
+        return getAuthTokenForRole(UserRole.CLERK);
+    }
+
+    protected String getAuthTokenForRole(UserRole role) {
+        CreateUserCommand command = new CreateUserCommand(
+                "Test User",
+                "test" + System.currentTimeMillis() + "@test.com",
+                "password123",
+                role
+        );
+        User user = createUserService.handle(command);
+        return "Bearer " + UserFixture.login(user.getEmail(), "password123", loginUserService);
     }
 }
