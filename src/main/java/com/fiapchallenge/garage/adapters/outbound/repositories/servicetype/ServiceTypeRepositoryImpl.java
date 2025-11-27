@@ -40,4 +40,19 @@ public class ServiceTypeRepositoryImpl implements ServiceTypeRepository {
                 .toList();
     }
 
+    @Override
+    public java.util.Optional<ServiceType> findById(UUID id) {
+        return jpaServiceTypeRepository.findById(id)
+                .map(serviceTypeMapper::toDomain);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return jpaServiceTypeRepository.existsById(id);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        jpaServiceTypeRepository.deleteById(id);
+    }
 }

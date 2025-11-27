@@ -23,6 +23,7 @@ public class ServiceTypeEntity {
     }
 
     public ServiceTypeEntity(ServiceType serviceType) {
+        this.id = serviceType.getId();
         this.description = serviceType.getDescription();
         this.value = serviceType.getValue();
     }
