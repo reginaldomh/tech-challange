@@ -11,6 +11,7 @@ import com.fiapchallenge.garage.domain.user.User;
 import com.fiapchallenge.garage.infra.JwtTokenVO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,19 +29,22 @@ public class UserController implements UserControllerOpenApiSpec {
         this.loginUserUseCase = loginUserUseCase;
     }
 
-    @PostMapping
     @Override
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> create(@Valid @RequestBody CreateUserRequestDTO createUserDTO) {
         CreateUserCommand command = new CreateUserCommand(
                 createUserDTO.fullname(),
                 createUserDTO.email(),
-                createUserDTO.password()
+                createUserDTO.password(),
+                createUserDTO.role()
         );
+
         return ResponseEntity.ok(createUserUseCase.handle(command));
     }
 
-    @PostMapping("/login")
     @Override
+    @PostMapping("/login")
     public ResponseEntity<LoginUserResponseDTO> login(@Valid @RequestBody LoginUserRequestDTO loginUserDTO) {
         LoginUserCommand command = new LoginUserCommand(loginUserDTO.email(), loginUserDTO.password());
         JwtTokenVO tokenVo = loginUserUseCase.handle(command);

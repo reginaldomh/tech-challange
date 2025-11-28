@@ -21,7 +21,8 @@ public class UserRepositoryImpl implements UserRepository {
                 user.getId(),
                 user.getFullname(),
                 user.getEmail(),
-                user.getPassword()
+                user.getPassword(),
+                user.getRole()
         );
         userEntity = jpaUserRepository.save(userEntity);
         return convertFromEntity(userEntity);
@@ -40,7 +41,8 @@ public class UserRepositoryImpl implements UserRepository {
                 userEntity.getId(),
                 userEntity.getFullname(),
                 userEntity.getEmail(),
-                userEntity.getPassword()
+                userEntity.getPassword(),
+                userEntity.getRole()
         );
     }
 }

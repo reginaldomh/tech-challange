@@ -8,12 +8,14 @@ public class User {
     private String fullname;
     private String email;
     private String password;
+    private UserRole role;
 
-    public User(UUID id, String fullname, String email, String password) {
+    public User(UUID id, String fullname, String email, String password, UserRole role) {
         this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -30,5 +32,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public UserRole getRole() {
+        return role;
     }
 }

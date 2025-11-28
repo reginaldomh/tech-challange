@@ -4,6 +4,7 @@ import com.fiapchallenge.garage.application.user.CreateUserService;
 import com.fiapchallenge.garage.application.user.command.CreateUserCommand;
 import com.fiapchallenge.garage.domain.user.User;
 import com.fiapchallenge.garage.domain.user.UserRepository;
+import com.fiapchallenge.garage.domain.user.UserRole;
 import com.fiapchallenge.garage.unit.user.utils.factory.UserTestFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,7 @@ class CreateUserUnitTest {
         assertNotNull(UserTestFactory.EMAIL, user.getEmail());
         assertNotNull(UserTestFactory.PASSWORD, user.getPassword());
         assertEquals(UserTestFactory.ENCRYPTED_PASSWORD, user.getPassword());
+        assertEquals(UserRole.ADMIN, user.getRole());
 
         verify(passwordEncoder).encode(UserTestFactory.PASSWORD);
         verify(userRepository).create(any(User.class));

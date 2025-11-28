@@ -5,6 +5,7 @@ import com.fiapchallenge.garage.application.user.LoginUserService;
 import com.fiapchallenge.garage.application.user.command.CreateUserCommand;
 import com.fiapchallenge.garage.application.user.command.LoginUserCommand;
 import com.fiapchallenge.garage.domain.user.User;
+import com.fiapchallenge.garage.domain.user.UserRole;
 
 public class UserFixture {
 
@@ -14,13 +15,19 @@ public class UserFixture {
         CreateUserCommand command = new CreateUserCommand(
                 "John Silva",
                 "john" + System.currentTimeMillis() + "@outlook.com",
-                PASSWORD
+                PASSWORD,
+                UserRole.CLERK
         );
         return createUserService.handle(command);
     }
 
     public static String login(String email, LoginUserService loginUserService) {
         LoginUserCommand command = new LoginUserCommand(email, PASSWORD);
+        return loginUserService.handle(command).token();
+    }
+
+    public static String login(String email, String password, LoginUserService loginUserService) {
+        LoginUserCommand command = new LoginUserCommand(email, password);
         return loginUserService.handle(command).token();
     }
 }
