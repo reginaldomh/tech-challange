@@ -60,13 +60,14 @@ class ServiceOrderIntegrationTest extends BaseIntegrationTest {
 
         String serviceOrderJson = """
                 {
+                    "customerId": "%s",
                 	"vehicleId": "%s",
                 	"observations": "Barulho ao trocar marcha",
                 	"serviceTypeIdList": [
                 		"%s"
                 	]
                 }
-        """.formatted(vehicleId.toString(), serviceTypeId.toString());
+        """.formatted(customerId.toString(), vehicleId.toString(), serviceTypeId.toString());
 
         mockMvc.perform(post("/service-orders")
                         .header("Authorization", getAuthToken())

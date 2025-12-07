@@ -2,6 +2,8 @@ package com.fiapchallenge.garage.unit.serviceorder;
 
 import com.fiapchallenge.garage.application.serviceorder.deliver.DeliverServiceOrderService;
 import com.fiapchallenge.garage.application.serviceorder.deliver.DeliverServiceOrderCommand;
+import com.fiapchallenge.garage.domain.customer.CpfCnpj;
+import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
@@ -33,8 +35,10 @@ class DeliverServiceOrderServiceTest {
     @DisplayName("Deve entregar ordem de serviço com sucesso")
     void shouldDeliverServiceOrderSuccessfully() {
         UUID serviceOrderId = UUID.randomUUID();
-        ServiceOrder serviceOrder = new ServiceOrder(serviceOrderId, "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.COMPLETED, List.of(), List.of());
+        UUID customerId = UUID.randomUUID();
+        Customer customer = new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"));
+        ServiceOrder serviceOrder = new ServiceOrder(serviceOrderId, "Test", UUID.randomUUID(),
+                ServiceOrderStatus.COMPLETED, List.of(), List.of(), customer);
 
         when(serviceOrderRepository.findById(serviceOrderId)).thenReturn(Optional.of(serviceOrder));
         when(serviceOrderRepository.save(any(ServiceOrder.class))).thenReturn(serviceOrder);
@@ -51,8 +55,10 @@ class DeliverServiceOrderServiceTest {
     @DisplayName("Deve lançar exceção quando ordem de serviço não está em status COMPLETED")
     void shouldThrowExceptionWhenNotCompletedStatus() {
         UUID serviceOrderId = UUID.randomUUID();
-        ServiceOrder serviceOrder = new ServiceOrder(serviceOrderId, "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.IN_PROGRESS, List.of(), List.of());
+        UUID customerId = UUID.randomUUID();
+        Customer customer = new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"));
+        ServiceOrder serviceOrder = new ServiceOrder(serviceOrderId, "Test", UUID.randomUUID(),
+                ServiceOrderStatus.IN_PROGRESS, List.of(), List.of(), customer);
 
         when(serviceOrderRepository.findById(serviceOrderId)).thenReturn(Optional.of(serviceOrder));
 

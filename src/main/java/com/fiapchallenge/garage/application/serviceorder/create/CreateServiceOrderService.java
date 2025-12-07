@@ -1,6 +1,8 @@
 package com.fiapchallenge.garage.application.serviceorder.create;
 
 import com.fiapchallenge.garage.application.stock.consume.ConsumeStockUseCase;
+import com.fiapchallenge.garage.domain.customer.Customer;
+import com.fiapchallenge.garage.domain.customer.CustomerRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderItem;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
@@ -19,18 +21,24 @@ public class CreateServiceOrderService implements CreateServiceOrderUseCase {
     private final ServiceTypeRepository serviceTypeRepository;
     private final ServiceOrderRepository serviceOrderRepository;
     private final ConsumeStockUseCase consumeStockUseCase;
+    private final CustomerRepository customerRepository;
 
     public CreateServiceOrderService(ServiceTypeRepository serviceTypeRepository,
                                    ServiceOrderRepository serviceOrderRepository,
-                                   ConsumeStockUseCase consumeStockUseCase) {
+                                   ConsumeStockUseCase consumeStockUseCase,
+                                   CustomerRepository customerRepository) {
 
         this.serviceTypeRepository = serviceTypeRepository;
         this.serviceOrderRepository = serviceOrderRepository;
         this.consumeStockUseCase = consumeStockUseCase;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public ServiceOrder handle(CreateServiceOrderCommand command) {
+        Customer customer = customerRepository.findById(command.customerId())
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + command.customerId()));
+
         List<ServiceType> serviceTypesList = command.serviceTypeIdList()
                 .stream()
                 .map(serviceTypeRepository::findByIdOrThrow)
@@ -45,7 +53,7 @@ public class CreateServiceOrderService implements CreateServiceOrderUseCase {
                         .map(item -> new ServiceOrderItem(item.stockId(), item.quantity()))
                         .toList();
 
-        ServiceOrder serviceOrder = new ServiceOrder(command);
+        ServiceOrder serviceOrder = new ServiceOrder(command, customer);
         serviceOrder.setServiceTypeList(serviceTypesList);
         serviceOrder.setStockItems(stockItems);
 

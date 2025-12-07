@@ -3,6 +3,7 @@ package com.fiapchallenge.garage.integration.fixtures;
 import com.fiapchallenge.garage.application.serviceorder.create.CreateServiceOrderService;
 import com.fiapchallenge.garage.application.serviceorder.create.CreateServiceOrderCommand;
 import com.fiapchallenge.garage.application.servicetype.CreateServiceTypeService;
+import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
@@ -30,10 +31,10 @@ public class ServiceOrderFixture {
         return serviceOrderRepository.save(serviceOrder);
     }
 
-    public static ServiceOrder createServiceOrder(UUID customerId, UUID vehicleId, ServiceOrderStatus status, CreateServiceTypeService createServiceTypeService, ServiceOrderRepository serviceOrderRepository) {
+    public static ServiceOrder createServiceOrder(Customer customer, UUID vehicleId, ServiceOrderStatus status, CreateServiceTypeService createServiceTypeService, ServiceOrderRepository serviceOrderRepository) {
         ServiceType serviceType = ServiceTypeFixture.createServiceType(createServiceTypeService);
 
-        ServiceOrder serviceOrder = new ServiceOrder(null, "Test service order", vehicleId, customerId, status, List.of(serviceType), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(null, "Test service order", vehicleId, status, List.of(serviceType), List.of(), customer);
         return serviceOrderRepository.save(serviceOrder);
     }
 }
