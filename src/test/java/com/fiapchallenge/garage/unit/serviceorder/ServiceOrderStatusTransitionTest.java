@@ -28,13 +28,8 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Deve lançar exceção ao iniciar progresso de status incorreto")
     void shouldThrowExceptionWhenStartingProgressFromWrongStatus() {
-<<<<<<< HEAD
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.RECEIVED, List.of(), List.of());
-=======
         ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
-                ServiceOrderStatus.CREATED, List.of(), List.of(), this.customer);
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
+                ServiceOrderStatus.RECEIVED, List.of(), List.of(), this.customer);
 
         assertThrows(IllegalStateException.class, serviceOrder::startProgress);
     }

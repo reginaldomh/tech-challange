@@ -2,15 +2,10 @@ package com.fiapchallenge.garage.unit.quote;
 
 import com.fiapchallenge.garage.application.quote.ApproveQuoteService;
 import com.fiapchallenge.garage.application.quote.RejectQuoteService;
-<<<<<<< HEAD
 import com.fiapchallenge.garage.application.serviceorderexecution.StartServiceOrderExecutionUseCase;
 import com.fiapchallenge.garage.application.serviceorderexecution.StartServiceOrderExecutionCommand;
-=======
-import com.fiapchallenge.garage.application.serviceorder.StartServiceOrderExecutionUseCase;
-import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderExecutionCommand;
 import com.fiapchallenge.garage.domain.customer.CpfCnpj;
 import com.fiapchallenge.garage.domain.customer.Customer;
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
 import com.fiapchallenge.garage.domain.quote.Quote;
 import com.fiapchallenge.garage.domain.quote.QuoteRepository;
 import com.fiapchallenge.garage.domain.quote.QuoteStatus;

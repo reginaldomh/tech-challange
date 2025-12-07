@@ -1,6 +1,5 @@
 package com.fiapchallenge.garage.unit.serviceorder;
 
-<<<<<<< HEAD
 import com.fiapchallenge.garage.application.serviceorder.finishdiagnosis.FinishServiceOrderDiagnosticCommand;
 import com.fiapchallenge.garage.application.serviceorder.startsdiagnosis.StartServiceOrderDiagnosticCommand;
 import com.fiapchallenge.garage.application.serviceorder.create.CreateServiceOrderService;
@@ -8,24 +7,15 @@ import com.fiapchallenge.garage.application.serviceorder.finishdiagnosis.FinishS
 import com.fiapchallenge.garage.application.serviceorder.startsdiagnosis.StartServiceOrderDiagnosticService;
 import com.fiapchallenge.garage.application.serviceorderexecution.FinishServiceOrderExecutionService;
 import com.fiapchallenge.garage.application.serviceorderexecution.StartServiceOrderExecutionService;
-=======
-import com.fiapchallenge.garage.application.customer.create.CreateCustomerService;
-import com.fiapchallenge.garage.application.serviceorder.*;
-import com.fiapchallenge.garage.application.serviceorder.command.FinishServiceOrderDiagnosticCommand;
-import com.fiapchallenge.garage.application.serviceorder.command.FinishServiceOrderExecutionCommand;
-import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderExecutionCommand;
-import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderDiagnosticCommand;
+import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
 import com.fiapchallenge.garage.domain.customer.CpfCnpj;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.customer.CustomerRepository;
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
-import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
 import com.fiapchallenge.garage.domain.serviceorderexecution.ServiceOrderExecutionRepository;
 import com.fiapchallenge.garage.domain.servicetype.ServiceType;
 import com.fiapchallenge.garage.domain.servicetype.ServiceTypeRepository;
-import com.fiapchallenge.garage.integration.fixtures.CustomerFixture;
 import com.fiapchallenge.garage.unit.serviceorder.util.factory.ServiceOrderTestFactory;
 import com.fiapchallenge.garage.unit.servicetype.utils.factory.ServiceTypeTestFactory;
 import org.junit.jupiter.api.DisplayName;

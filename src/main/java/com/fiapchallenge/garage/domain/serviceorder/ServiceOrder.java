@@ -1,11 +1,7 @@
 package com.fiapchallenge.garage.domain.serviceorder;
 
-<<<<<<< HEAD
 import com.fiapchallenge.garage.application.serviceorder.create.CreateServiceOrderCommand;
-=======
-import com.fiapchallenge.garage.application.serviceorder.command.CreateServiceOrderCommand;
 import com.fiapchallenge.garage.domain.customer.Customer;
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
 import com.fiapchallenge.garage.domain.servicetype.ServiceType;
 
 import java.util.ArrayList;
@@ -28,13 +24,8 @@ public class ServiceOrder {
         }
         this.observations = command.observations();
         this.vehicleId = command.vehicleId();
-<<<<<<< HEAD
-        this.customerId = command.customerId();
         this.status = ServiceOrderStatus.RECEIVED;
-=======
-        this.status = ServiceOrderStatus.CREATED;
         this.customer = customer;
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
     }
 
     public ServiceOrder(UUID id, String observations, UUID vehicleId, ServiceOrderStatus status, List<ServiceType> serviceTypeList, List<ServiceOrderItem> stockItems, Customer customer) {

@@ -32,12 +32,7 @@ class ServiceOrderManagementUnitTest {
                 UUID.randomUUID(),
                 "Teste",
                 vehicleId,
-<<<<<<< HEAD
-                customerId,
                 ServiceOrderStatus.RECEIVED,
-=======
-                ServiceOrderStatus.CREATED,
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
                 new ArrayList<>(),
                 new ArrayList<>(),
                 customer
@@ -107,12 +102,7 @@ class ServiceOrderManagementUnitTest {
                 UUID.randomUUID(),
                 "Teste",
                 vehicleId,
-<<<<<<< HEAD
-                customerId,
                 ServiceOrderStatus.RECEIVED,
-=======
-                ServiceOrderStatus.CREATED,
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
                 null,
                 null,
                 new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"))
@@ -135,12 +125,7 @@ class ServiceOrderManagementUnitTest {
                 UUID.randomUUID(),
                 "Teste",
                 vehicleId,
-<<<<<<< HEAD
-                customerId,
                 ServiceOrderStatus.RECEIVED,
-=======
-                ServiceOrderStatus.CREATED,
->>>>>>> parent of a0c6218 (Revert "Adicionado relacionamento direto entre serviceorder e customer")
                 null,
                 null,
                 new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"))
