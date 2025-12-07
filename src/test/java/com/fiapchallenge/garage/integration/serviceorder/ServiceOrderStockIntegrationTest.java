@@ -82,6 +82,7 @@ class ServiceOrderStockIntegrationTest extends BaseIntegrationTest {
 
         String serviceOrderJson = """
                 {
+                    "customerId": "%s",
                     "vehicleId": "%s",
                     "observations": "Teste estoque",
                     "serviceTypeIdList": ["%s"],
@@ -92,7 +93,7 @@ class ServiceOrderStockIntegrationTest extends BaseIntegrationTest {
                         }
                     ]
                 }
-        """.formatted(vehicleId, serviceTypeId, stockId);
+        """.formatted(customerId, vehicleId, serviceTypeId, stockId);
 
         mockMvc.perform(post("/service-orders")
                         .header("Authorization", getAuthToken())
@@ -138,6 +139,7 @@ class ServiceOrderStockIntegrationTest extends BaseIntegrationTest {
 
         String serviceOrderJson = """
                 {
+                    "customerId": "%s",
                     "vehicleId": "%s",
                     "observations": "Teste cancelamento",
                     "serviceTypeIdList": ["%s"],
@@ -148,7 +150,7 @@ class ServiceOrderStockIntegrationTest extends BaseIntegrationTest {
                         }
                     ]
                 }
-        """.formatted(vehicleId, serviceTypeId, stockId);
+        """.formatted(customerId, vehicleId, serviceTypeId, stockId);
 
         mockMvc.perform(post("/service-orders")
                         .header("Authorization", getAuthToken())

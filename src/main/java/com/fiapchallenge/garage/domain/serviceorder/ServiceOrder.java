@@ -1,6 +1,7 @@
 package com.fiapchallenge.garage.domain.serviceorder;
 
 import com.fiapchallenge.garage.application.serviceorder.command.CreateServiceOrderCommand;
+import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.servicetype.ServiceType;
 
 import java.util.List;
@@ -11,26 +12,29 @@ public class ServiceOrder {
     private UUID id;
     private String observations;
     private UUID vehicleId;
-    private UUID customerId;
     private ServiceOrderStatus status;
     private List<ServiceType> serviceTypeList;
     private List<ServiceOrderItem> stockItems;
+    private Customer customer;
 
-    public ServiceOrder(CreateServiceOrderCommand command) {
+    public ServiceOrder(CreateServiceOrderCommand command, Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
         this.observations = command.observations();
         this.vehicleId = command.vehicleId();
-        this.customerId = command.customerId();
         this.status = ServiceOrderStatus.CREATED;
+        this.customer = customer;
     }
 
-    public ServiceOrder(UUID id, String observations, UUID vehicleId, UUID customerId, ServiceOrderStatus status, List<ServiceType> serviceTypeList, List<ServiceOrderItem> stockItems) {
+    public ServiceOrder(UUID id, String observations, UUID vehicleId, ServiceOrderStatus status, List<ServiceType> serviceTypeList, List<ServiceOrderItem> stockItems, Customer customer) {
         this.id = id;
         this.observations = observations;
         this.vehicleId = vehicleId;
-        this.customerId = customerId;
         this.status = status;
         this.serviceTypeList = serviceTypeList;
         this.stockItems = stockItems;
+        this.customer = customer;
     }
 
     public UUID getId() {
@@ -45,8 +49,8 @@ public class ServiceOrder {
         return vehicleId;
     }
 
-    public UUID getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return this.customer;
     }
 
     public ServiceOrderStatus getStatus() {

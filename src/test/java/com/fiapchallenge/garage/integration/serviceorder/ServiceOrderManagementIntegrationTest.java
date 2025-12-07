@@ -190,11 +190,12 @@ class ServiceOrderManagementIntegrationTest extends BaseIntegrationTest {
 
         String serviceOrderJson = """
                 {
+                    "customerId": "%s",
                     "vehicleId": "%s",
                     "observations": "Teste gerenciamento",
                     "serviceTypeIdList": ["%s"]
                 }
-        """.formatted(vehicleId, serviceTypeId);
+        """.formatted(customerId, vehicleId, serviceTypeId);
 
         mockMvc.perform(post("/service-orders")
                         .header("Authorization", getAuthToken())
@@ -233,12 +234,13 @@ class ServiceOrderManagementIntegrationTest extends BaseIntegrationTest {
 
         String serviceOrderJson = """
                 {
+                    "customerId": "%s",
                     "vehicleId": "%s",
                     "observations": "Teste com estoque",
                     "serviceTypeIdList": ["%s"],
                     "stockItems": []
                 }
-        """.formatted(vehicleId, serviceTypeId);
+        """.formatted(customerId, vehicleId, serviceTypeId);
 
         mockMvc.perform(post("/service-orders")
                         .header("Authorization", getAuthToken())

@@ -32,9 +32,6 @@ public class ServiceOrderEntity {
     @Column(name = "vehicle_id")
     private UUID vehicleId;
 
-    @Column(name = "customer_id")
-    private UUID customerId;
-
     @ManyToMany
     @JoinTable(
             name = "service_order_service_type",
@@ -49,8 +46,8 @@ public class ServiceOrderEntity {
     @JoinColumn(name = "vehicle_id", insertable = false, updatable = false)
     private VehicleEntity vehicle;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
 
     @OneToMany(mappedBy = "serviceOrderId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -62,7 +59,9 @@ public class ServiceOrderEntity {
         this.observations = serviceOrder.getObservations();
         this.status = serviceOrder.getStatus();
         this.vehicleId = serviceOrder.getVehicleId();
-        this.customerId = serviceOrder.getCustomerId();
+        if (serviceOrder.getCustomer() != null) {
+            this.customer = new CustomerEntity(serviceOrder.getCustomer());
+        }
     }
 
     public UUID getId() {
@@ -89,14 +88,6 @@ public class ServiceOrderEntity {
         this.vehicleId = vehicleId;
     }
 
-    public UUID getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(UUID customerId) {
-        this.customerId = customerId;
-    }
-
     public List<ServiceTypeEntity> getServiceTypeList() {
         return serviceTypeList;
     }
@@ -119,6 +110,14 @@ public class ServiceOrderEntity {
 
     public void setVehicle(VehicleEntity vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
     }
 
     public List<ServiceOrderItemEntity> getStockItems() {

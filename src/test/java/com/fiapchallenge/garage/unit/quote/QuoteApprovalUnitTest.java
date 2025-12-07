@@ -4,6 +4,8 @@ import com.fiapchallenge.garage.application.quote.ApproveQuoteService;
 import com.fiapchallenge.garage.application.quote.RejectQuoteService;
 import com.fiapchallenge.garage.application.serviceorder.StartServiceOrderExecutionUseCase;
 import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderExecutionCommand;
+import com.fiapchallenge.garage.domain.customer.CpfCnpj;
+import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.quote.Quote;
 import com.fiapchallenge.garage.domain.quote.QuoteRepository;
 import com.fiapchallenge.garage.domain.quote.QuoteStatus;
@@ -41,14 +43,14 @@ class QuoteApprovalUnitTest {
     @Mock
     private StartServiceOrderExecutionUseCase startServiceOrderExecutionUseCase;
 
+    private Customer customer = new Customer(UUID.randomUUID(), "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"));
+    private UUID serviceOrderId = UUID.randomUUID();
     @Test
     void shouldChangeServiceOrderToInProgressWhenQuoteIsApproved() {
-        UUID serviceOrderId = UUID.randomUUID();
-        UUID customerId = UUID.randomUUID();
-        Quote quote = new Quote(serviceOrderId, customerId, List.of());
+        Quote quote = new Quote(this.serviceOrderId, this.customer.getId(), List.of());
         ServiceOrder serviceOrder = new ServiceOrder(
-            serviceOrderId, "Test", UUID.randomUUID(), UUID.randomUUID(),
-            ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of()
+            this.serviceOrderId, "Test", UUID.randomUUID(),
+            ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of(), this.customer
         );
 
         when(quoteRepository.findByServiceOrderIdOrThrow(serviceOrderId)).thenReturn(quote);
@@ -65,12 +67,10 @@ class QuoteApprovalUnitTest {
 
     @Test
     void shouldCancelServiceOrderWhenQuoteIsRejected() {
-        UUID serviceOrderId = UUID.randomUUID();
-        UUID customerId = UUID.randomUUID();
-        Quote quote = new Quote(serviceOrderId, customerId, List.of());
+        Quote quote = new Quote(this.serviceOrderId, this.customer.getId(), List.of());
         ServiceOrder serviceOrder = new ServiceOrder(
-            serviceOrderId, "Test", UUID.randomUUID(), UUID.randomUUID(),
-            ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of()
+            this.serviceOrderId, "Test", UUID.randomUUID(),
+            ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of(), this.customer
         );
 
         when(quoteRepository.findByServiceOrderIdOrThrow(serviceOrderId)).thenReturn(quote);

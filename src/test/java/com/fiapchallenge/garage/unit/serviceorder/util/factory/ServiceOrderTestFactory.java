@@ -1,6 +1,7 @@
 package com.fiapchallenge.garage.unit.serviceorder.util.factory;
 
 import com.fiapchallenge.garage.application.serviceorder.command.CreateServiceOrderCommand;
+import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
 import com.fiapchallenge.garage.domain.servicetype.ServiceType;
@@ -26,27 +27,27 @@ public class ServiceOrderTestFactory {
         );
     }
 
-    public static ServiceOrder createServiceOrder(UUID vehicleId, UUID customerId) {
+    public static ServiceOrder createServiceOrder(UUID vehicleId, Customer customerId) {
         return new ServiceOrder(
                 ID,
                 OBSERVATIONS,
                 vehicleId,
-                customerId,
                 STATUS,
                 SERVICE_TYPE_LIST,
-                List.of()
+                List.of(),
+                customerId
         );
     }
 
-    public static ServiceOrder createServiceOrder(UUID vehicleId, UUID customerId, ServiceOrderStatus status) {
+    public static ServiceOrder createServiceOrder(UUID vehicleId, Customer customer, ServiceOrderStatus status) {
         return new ServiceOrder(
                 ID,
                 OBSERVATIONS,
                 vehicleId,
-                customerId,
                 status,
                 SERVICE_TYPE_LIST,
-                List.of()
+                List.of(),
+                customer
         );
     }
 
