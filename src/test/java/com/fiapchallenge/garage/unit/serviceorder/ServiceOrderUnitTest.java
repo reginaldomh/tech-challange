@@ -1,14 +1,10 @@
 package com.fiapchallenge.garage.unit.serviceorder;
 
-import com.fiapchallenge.garage.application.customer.create.CreateCustomerService;
 import com.fiapchallenge.garage.application.serviceorder.*;
 import com.fiapchallenge.garage.application.serviceorder.command.FinishServiceOrderDiagnosticCommand;
 import com.fiapchallenge.garage.application.serviceorder.command.FinishServiceOrderExecutionCommand;
 import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderExecutionCommand;
 import com.fiapchallenge.garage.application.serviceorder.command.StartServiceOrderDiagnosticCommand;
-import com.fiapchallenge.garage.domain.customer.CpfCnpj;
-import com.fiapchallenge.garage.domain.customer.Customer;
-import com.fiapchallenge.garage.domain.customer.CustomerRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
@@ -16,7 +12,6 @@ import com.fiapchallenge.garage.domain.serviceorderexecution.ServiceOrderExecuti
 import com.fiapchallenge.garage.domain.serviceorderexecution.ServiceOrderExecutionRepository;
 import com.fiapchallenge.garage.domain.servicetype.ServiceType;
 import com.fiapchallenge.garage.domain.servicetype.ServiceTypeRepository;
-import com.fiapchallenge.garage.integration.fixtures.CustomerFixture;
 import com.fiapchallenge.garage.unit.serviceorder.util.factory.ServiceOrderTestFactory;
 import com.fiapchallenge.garage.unit.servicetype.utils.factory.ServiceTypeTestFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -48,9 +42,6 @@ class ServiceOrderUnitTest {
     @Mock
     ServiceOrderExecutionRepository serviceOrderExecutionRepository;
 
-    @Mock
-    CustomerRepository customerRepository;
-
     @InjectMocks
     private CreateServiceOrderService createServiceOrderService;
 
@@ -66,8 +57,6 @@ class ServiceOrderUnitTest {
     @InjectMocks
     private FinishServiceOrderExecutionService finishServiceOrderExecutionService;
 
-    private Customer customer = new Customer(UUID.randomUUID(), "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"));;
-
     @Test
     @DisplayName("Criação de Ordem de Serviço")
     void shouldCreateServiceOrder() {
@@ -75,10 +64,10 @@ class ServiceOrderUnitTest {
         UUID vehicleId = UUID.randomUUID();
 
         when(serviceTypeRepository.findByIdOrThrow(any(UUID.class))).thenReturn(serviceType);
-        when(customerRepository.findById(any(UUID.class))).thenReturn(Optional.of(customer));
-        when(serviceOrderRepository.save(any(ServiceOrder.class))).thenReturn(ServiceOrderTestFactory.createServiceOrder(vehicleId, this.customer));
+        UUID customerId = UUID.randomUUID();
+        when(serviceOrderRepository.save(any(ServiceOrder.class))).thenReturn(ServiceOrderTestFactory.createServiceOrder(vehicleId, customerId));
 
-        ServiceOrder serviceOrder = createServiceOrderService.handle(ServiceOrderTestFactory.createServiceOrderCommand(vehicleId, customer.getId()));
+        ServiceOrder serviceOrder = createServiceOrderService.handle(ServiceOrderTestFactory.createServiceOrderCommand(vehicleId, customerId));
 
         assertEquals(ServiceOrderTestFactory.OBSERVATIONS, serviceOrder.getObservations());
         assertEquals(ServiceOrderStatus.CREATED, serviceOrder.getStatus());
@@ -92,7 +81,7 @@ class ServiceOrderUnitTest {
     void shouldStartDiagnostic() {
         UUID vehicleId = UUID.randomUUID();
         UUID customerId = UUID.randomUUID();
-        Optional<ServiceOrder> mockedServiceOrder = Optional.of(ServiceOrderTestFactory.createServiceOrder(vehicleId, customer));
+        Optional<ServiceOrder> mockedServiceOrder = Optional.of(ServiceOrderTestFactory.createServiceOrder(vehicleId, customerId));
         when(serviceOrderRepository.findById(any(UUID.class))).thenReturn(mockedServiceOrder);
 
         ServiceOrder serviceOrder = startServiceOrderDiagnosticService.handle(new StartServiceOrderDiagnosticCommand(ServiceOrderTestFactory.ID));
@@ -105,7 +94,7 @@ class ServiceOrderUnitTest {
     void shouldFinishDiagnostic() {
         UUID vehicleId = UUID.randomUUID();
         UUID customerId = UUID.randomUUID();
-        Optional<ServiceOrder> mockedServiceOrder = Optional.of(ServiceOrderTestFactory.createServiceOrder(vehicleId, customer, ServiceOrderStatus.IN_DIAGNOSIS));
+        Optional<ServiceOrder> mockedServiceOrder = Optional.of(ServiceOrderTestFactory.createServiceOrder(vehicleId, customerId, ServiceOrderStatus.IN_DIAGNOSIS));
         when(serviceOrderRepository.findById(any(UUID.class))).thenReturn(mockedServiceOrder);
         ServiceOrder serviceOrder = finishServiceOrderDiagnosticService.handle(new FinishServiceOrderDiagnosticCommand(ServiceOrderTestFactory.ID));
 

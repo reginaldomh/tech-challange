@@ -1,7 +1,5 @@
 package com.fiapchallenge.garage.unit.serviceorder;
 
-import com.fiapchallenge.garage.domain.customer.CpfCnpj;
-import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderItem;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
@@ -27,15 +25,15 @@ class ServiceOrderManagementUnitTest {
     void setUp() {
         vehicleId = UUID.randomUUID();
         customerId = UUID.randomUUID();
-        Customer customer = new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"));
+
         serviceOrder = new ServiceOrder(
                 UUID.randomUUID(),
                 "Teste",
                 vehicleId,
+                customerId,
                 ServiceOrderStatus.CREATED,
                 new ArrayList<>(),
-                new ArrayList<>(),
-                customer
+                new ArrayList<>()
         );
     }
 
@@ -102,10 +100,10 @@ class ServiceOrderManagementUnitTest {
                 UUID.randomUUID(),
                 "Teste",
                 vehicleId,
+                customerId,
                 ServiceOrderStatus.CREATED,
                 null,
-                null,
-                new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"))
+                null
         );
 
         ServiceOrderItem item = new ServiceOrderItem(UUID.randomUUID(), UUID.randomUUID(), 1);
@@ -125,10 +123,10 @@ class ServiceOrderManagementUnitTest {
                 UUID.randomUUID(),
                 "Teste",
                 vehicleId,
+                customerId,
                 ServiceOrderStatus.CREATED,
                 null,
-                null,
-                new Customer(customerId, "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"))
+                null
         );
 
         ServiceOrderItem item = new ServiceOrderItem(UUID.randomUUID(), UUID.randomUUID(), 1);

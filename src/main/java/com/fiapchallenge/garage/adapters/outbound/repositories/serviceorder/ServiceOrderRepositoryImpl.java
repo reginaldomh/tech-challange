@@ -4,8 +4,6 @@ import com.fiapchallenge.garage.adapters.outbound.entities.ServiceOrderEntity;
 import com.fiapchallenge.garage.adapters.outbound.entities.ServiceOrderItemEntity;
 import com.fiapchallenge.garage.adapters.outbound.entities.ServiceTypeEntity;
 import com.fiapchallenge.garage.adapters.outbound.repositories.servicetype.JpaServiceTypeRepository;
-import com.fiapchallenge.garage.domain.customer.CpfCnpj;
-import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderItem;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderRepository;
@@ -83,25 +81,14 @@ public class ServiceOrderRepositoryImpl implements ServiceOrderRepository {
                 .map(item -> new ServiceOrderItem(item.getId(), item.getStockId(), item.getQuantity()))
                 .toList());
 
-        Customer customer = null;
-        if (serviceOrderEntity.getCustomer() != null) {
-            customer = new Customer(
-                serviceOrderEntity.getCustomer().getId(),
-                serviceOrderEntity.getCustomer().getName(),
-                serviceOrderEntity.getCustomer().getEmail(),
-                serviceOrderEntity.getCustomer().getPhone(),
-                new CpfCnpj(serviceOrderEntity.getCustomer().getCpfCnpj())
-            );
-        }
-
         return new ServiceOrder(
                 serviceOrderEntity.getId(),
                 serviceOrderEntity.getObservations(),
                 serviceOrderEntity.getVehicleId(),
+                serviceOrderEntity.getCustomerId(),
                 serviceOrderEntity.getStatus(),
                 serviceTypeList,
-                stockItems,
-                customer
+                stockItems
         );
     }
 }

@@ -40,10 +40,8 @@ public class TrackServiceOrderService implements TrackServiceOrderUseCase {
         Vehicle vehicle = vehicleRepository.findById(serviceOrder.getVehicleId())
                 .orElseThrow(() -> new SoatNotFoundException("Ordem de serviço não encontrada"));
 
-        Customer customer = serviceOrder.getCustomer();
-        if (customer == null) {
-            throw new SoatNotFoundException("Ordem de serviço não encontrada");
-        }
+        Customer customer = customerRepository.findById(serviceOrder.getCustomerId())
+                .orElseThrow(() -> new SoatNotFoundException("Ordem de serviço não encontrada"));
 
         if (!customer.getCpfCnpjValue().equals(cpfCnpj)) {
             throw new SoatNotFoundException("Ordem de serviço não encontrada");
