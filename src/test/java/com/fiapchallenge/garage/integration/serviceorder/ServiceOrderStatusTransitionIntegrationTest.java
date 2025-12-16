@@ -68,16 +68,16 @@ class ServiceOrderStatusTransitionIntegrationTest extends BaseIntegrationTest {
         UUID customerId = CustomerFixture.createCustomer(createCustomerService).getId();
         UUID vehicleId = VehicleFixture.createVehicle(customerId, createVehicleService).getId();
         UUID serviceTypeId = ServiceTypeFixture.createServiceType(createServiceTypeService).getId();
-
         String serviceOrderJson = """
                 {
+                    "customerId": "%s",
                 	"vehicleId": "%s",
                 	"observations": "Teste de transição",
                 	"serviceTypeIdList": [
                 		"%s"
                 	]
                 }
-        """.formatted(vehicleId.toString(), serviceTypeId.toString());
+        """.formatted(customerId.toString(),vehicleId.toString(), serviceTypeId.toString());
 
         mockMvc.perform(post("/service-orders")
                         .header("Authorization", getAuthTokenForRole(UserRole.CLERK))

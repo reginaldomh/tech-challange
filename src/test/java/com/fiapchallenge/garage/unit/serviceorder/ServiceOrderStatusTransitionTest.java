@@ -1,5 +1,7 @@
 package com.fiapchallenge.garage.unit.serviceorder;
 
+import com.fiapchallenge.garage.domain.customer.CpfCnpj;
+import com.fiapchallenge.garage.domain.customer.Customer;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrder;
 import com.fiapchallenge.garage.domain.serviceorder.ServiceOrderStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -11,12 +13,12 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceOrderStatusTransitionTest {
-
+    private Customer customer = new Customer(UUID.randomUUID(), "Test Customer", "test@test.com", "12345678901", new CpfCnpj("667.713.590-00"));
     @Test
     @DisplayName("Deve iniciar progresso quando em status AWAITING_APPROVAL")
     void shouldStartProgressWhenInAwaitingApprovalStatus() {
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of(), this.customer);
 
         serviceOrder.startProgress();
 
@@ -26,8 +28,8 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Deve lançar exceção ao iniciar progresso de status incorreto")
     void shouldThrowExceptionWhenStartingProgressFromWrongStatus() {
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.RECEIVED, List.of(), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.RECEIVED, List.of(), List.of(), this.customer);
 
         assertThrows(IllegalStateException.class, serviceOrder::startProgress);
     }
@@ -35,8 +37,8 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Deve completar quando em status IN_PROGRESS")
     void shouldCompleteWhenInProgressStatus() {
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.IN_PROGRESS, List.of(), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.IN_PROGRESS, List.of(), List.of(), this.customer);
 
         serviceOrder.complete();
 
@@ -46,8 +48,8 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Deve lançar exceção ao completar de status incorreto")
     void shouldThrowExceptionWhenCompletingFromWrongStatus() {
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.AWAITING_APPROVAL, List.of(), List.of(), this.customer);
 
         assertThrows(IllegalStateException.class, serviceOrder::complete);
     }
@@ -55,8 +57,8 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Deve entregar quando em status COMPLETED")
     void shouldDeliverWhenInCompletedStatus() {
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.COMPLETED, List.of(), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.COMPLETED, List.of(), List.of(), this.customer);
 
         serviceOrder.deliver();
 
@@ -66,8 +68,8 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Deve lançar exceção ao entregar de status incorreto")
     void shouldThrowExceptionWhenDeliveringFromWrongStatus() {
-        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.IN_PROGRESS, List.of(), List.of());
+        ServiceOrder serviceOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.IN_PROGRESS, List.of(), List.of(), this.customer);
 
         assertThrows(IllegalStateException.class, serviceOrder::deliver);
     }
@@ -75,10 +77,10 @@ class ServiceOrderStatusTransitionTest {
     @Test
     @DisplayName("Não deve permitir cancelar ordens completadas ou entregues")
     void shouldNotAllowCancellingCompletedOrDeliveredOrders() {
-        ServiceOrder completedOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.COMPLETED, List.of(), List.of());
-        ServiceOrder deliveredOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(), UUID.randomUUID(),
-                ServiceOrderStatus.DELIVERED, List.of(), List.of());
+        ServiceOrder completedOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.COMPLETED, List.of(), List.of(), this.customer);
+        ServiceOrder deliveredOrder = new ServiceOrder(UUID.randomUUID(), "Test", UUID.randomUUID(),
+                ServiceOrderStatus.DELIVERED, List.of(), List.of(), this.customer);
 
         assertThrows(IllegalStateException.class, completedOrder::cancel);
         assertThrows(IllegalStateException.class, deliveredOrder::cancel);
