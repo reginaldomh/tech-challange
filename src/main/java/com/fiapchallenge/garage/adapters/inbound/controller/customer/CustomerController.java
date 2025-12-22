@@ -1,7 +1,8 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
-import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
-import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CreateCustomerRequestDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerResponseDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerRequestDTO;
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase;
 import com.fiapchallenge.garage.application.customer.create.CreateCustomerUseCase.CreateCustomerCommand;
 import com.fiapchallenge.garage.application.customer.delete.DeleteCustomerUseCase;
@@ -48,7 +49,7 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
 
     @Override
     @GetMapping
-    public ResponseEntity<Page<Customer>> list(
+    public ResponseEntity<Page<CustomerResponseDTO>> list(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String cpfCnpj,
@@ -59,13 +60,13 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
         Pageable pageable = CustomPageRequest.of(page, size);
         Page<Customer> customers = listCustomersUseCase.handle(filter, pageable);
 
-        return ResponseEntity.ok(customers);
+        return ResponseEntity.ok(customers.map(CustomerResponseDTO::fromDomain));
     }
 
     @Override
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('CLERK')")
-    public ResponseEntity<Customer> create(@Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+    public ResponseEntity<CustomerResponseDTO> create(@Valid @RequestBody CreateCustomerRequestDTO customerRequestDTO) {
         CreateCustomerCommand cmd = new CreateCustomerCommand(
                 customerRequestDTO.name(),
                 customerRequestDTO.email(),
@@ -74,12 +75,12 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
         );
 
         Customer customer = createCustomerUseCase.handle(cmd);
-        return ResponseEntity.ok(customer);
+        return ResponseEntity.ok(CustomerResponseDTO.fromDomain(customer));
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> update(@PathVariable UUID id, @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO) {
+    public ResponseEntity<CustomerResponseDTO> update(@PathVariable UUID id, @Valid @RequestBody UpdateCustomerRequestDTO updateCustomerDTO) {
         UpdateCustomerCmd cmd = new UpdateCustomerCmd(
                 id,
                 updateCustomerDTO.name(),
@@ -88,7 +89,7 @@ public class CustomerController implements CustomerControllerOpenApiSpec {
         );
 
         Customer customer = updateCustomerUseCase.handle(cmd);
-        return ResponseEntity.ok(customer);
+        return ResponseEntity.ok(CustomerResponseDTO.fromDomain(customer));
     }
 
     @Override

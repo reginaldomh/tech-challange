@@ -1,7 +1,8 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.customer;
 
-import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerRequestDTO;
-import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CreateCustomerRequestDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.CustomerResponseDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.customer.dto.UpdateCustomerRequestDTO;
 import com.fiapchallenge.garage.domain.customer.Customer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,9 +34,9 @@ public interface CustomerControllerOpenApiSpec {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Customer.class))),
         @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
-    ResponseEntity<Customer> create(
-        @Parameter(name = "CreateCustomer", description = "Dados do cliente", schema = @Schema(implementation = CustomerRequestDTO.class))
-        @Valid @RequestBody CustomerRequestDTO customerRequestDTO);
+    ResponseEntity<CustomerResponseDTO> create(
+        @Parameter(name = "CreateCustomer", description = "Dados do cliente", schema = @Schema(implementation = CreateCustomerRequestDTO.class))
+        @Valid @RequestBody CreateCustomerRequestDTO createCustomerRequestDTO);
 
     @PutMapping(value = "/{id}", consumes = "application/json")
     @Operation(summary = "Atualizar um cliente", description = "Atualiza um cliente existente com os dados fornecidos")
@@ -45,10 +46,10 @@ public interface CustomerControllerOpenApiSpec {
         @ApiResponse(responseCode = "404", description = "Cliente não encontrado", content = @Content),
         @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
-    ResponseEntity<Customer> update(
+    ResponseEntity<CustomerResponseDTO> update(
         @Parameter(name = "id", description = "ID do cliente") @PathVariable UUID id,
-        @Parameter(name = "updateCustomer", description = "Dados para atualizar cliente", schema = @Schema(implementation = UpdateCustomerDTO.class))
-        @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO);
+        @Parameter(name = "updateCustomer", description = "Dados para atualizar cliente", schema = @Schema(implementation = UpdateCustomerRequestDTO.class))
+        @Valid @RequestBody UpdateCustomerRequestDTO updateCustomerRequestDTO);
 
     @GetMapping
     @Operation(summary = "Listar clientes", description = "Retorna uma lista paginada de clientes com filtros opcionais")
@@ -56,7 +57,7 @@ public interface CustomerControllerOpenApiSpec {
         @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Customer.class)))
     })
-    ResponseEntity<Page<Customer>> list(
+    ResponseEntity<Page<CustomerResponseDTO>> list(
         @Parameter(name = "name", description = "Filtrar por nome do cliente") @RequestParam(required = false) String name,
         @Parameter(name = "email", description = "Filtrar por email do cliente") @RequestParam(required = false) String email,
         @Parameter(name = "cpfCnpj", description = "Filtrar por CPF/CNPJ do cliente") @RequestParam(required = false) String cpfCnpj,
