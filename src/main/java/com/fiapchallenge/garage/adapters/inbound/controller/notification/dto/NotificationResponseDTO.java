@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record NotificationResponseDTO(
         UUID id,
-        String title,
+        String type,
         String message,
         boolean read,
         LocalDateTime createdAt
@@ -15,7 +15,7 @@ public record NotificationResponseDTO(
     public static NotificationResponseDTO fromDomain(Notification notification) {
         return new NotificationResponseDTO(
                 notification.getId(),
-                notification.getTitle(),
+                notification.getType(),
                 notification.getMessage(),
                 notification.isRead(),
                 notification.getCreatedAt()
