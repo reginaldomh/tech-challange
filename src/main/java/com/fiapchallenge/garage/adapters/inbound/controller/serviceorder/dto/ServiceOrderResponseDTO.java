@@ -13,5 +13,4 @@ public record ServiceOrderResponseDTO(
         ServiceOrderStatus status,
         List<ServiceTypeDTO> serviceTypeList,
         List<ServiceOrderItemDTO> serviceItems
-) {
-}
+) {}

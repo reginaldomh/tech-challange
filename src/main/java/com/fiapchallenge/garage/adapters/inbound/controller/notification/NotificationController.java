@@ -1,6 +1,7 @@
 package com.fiapchallenge.garage.adapters.inbound.controller.notification;
 
 import com.fiapchallenge.garage.adapters.inbound.controller.notification.dto.NotificationResponseDTO;
+import com.fiapchallenge.garage.adapters.inbound.controller.notification.mapper.NotificationMapper;
 import com.fiapchallenge.garage.application.notification.list.ListNotificationUseCase;
 import com.fiapchallenge.garage.application.notification.markread.MarkNotificationAsReadUseCase;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public class NotificationController implements NotificationControllerOpenApiSpec
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return ResponseEntity.ok(listNotificationUseCase.handle(pageable).map(NotificationResponseDTO::fromDomain));
+        return ResponseEntity.ok(NotificationMapper.toResponseDTOPage(listNotificationUseCase.handle(pageable)));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class NotificationController implements NotificationControllerOpenApiSpec
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return ResponseEntity.ok(listNotificationUseCase.handleUnread(pageable).map(NotificationResponseDTO::fromDomain));
+        return ResponseEntity.ok(NotificationMapper.toResponseDTOPage(listNotificationUseCase.handleUnread(pageable)));
     }
 
     @Override
