@@ -6,8 +6,25 @@ terraform {
         }
     }
 }
+
 provider "aws" {
     region = "sa-east-1"
+}
+
+variable "accessConfig" {
+    description = "EKS authentication mode"
+    type        = string
+    default     = "API_AND_CONFIG_MAP"
+}
+
+variable "accountId" {
+    description = "AWS Account ID"
+    type        = string
+}
+
+variable "roleName" {
+    description = "IAM Role name for EKS access"
+    type        = string
 }
 
 locals {
