@@ -57,8 +57,31 @@ resource "aws_subnet" "private_subnet" {
     }
 }
 
-// Duas IAM Roles: uma para o EKS Cluster e outra para o Node Group
+// Security Group para o EKS cluster
+resource "aws_security_group" "main" {
+    name_prefix = "${local.projectName}-eks-sg"
+    vpc_id      = aws_vpc.main.id
 
+    ingress {
+        from_port   = 443
+        to_port     = 443
+        protocol    = "tcp"
+        cidr_blocks = ["10.0.0.0/16"]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        name = "${local.projectName}-eks-security-group"
+    }
+}
+
+// Duas IAM Roles: uma para o EKS Cluster e outra para o Node Group
 resource "aws_iam_role" "eks_service_role" {
     name = "${local.projectName}-eks-cluster-role"
 
